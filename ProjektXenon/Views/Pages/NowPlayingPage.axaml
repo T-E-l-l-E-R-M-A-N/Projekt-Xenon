@@ -1,0 +1,294 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.ViewModels"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:models="clr-namespace:ProjektXenon.Models"
+             xmlns:controls="clr-namespace:ProjektXenon.Controls"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:behaviors="clr-namespace:ProjektXenon.Behaviors"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.ValueConverters"
+             xmlns:views="clr-namespace:ProjektXenon.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjektXenon.Views.NowPlayingPage"
+             x:DataType="viewModels:NowPlayingPageViewModel">
+    <UserControl.Styles>
+        <Style Selector="Button.AppBarButton">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+        <Style Selector="Button.AppBarButton:disabled">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+
+        <Style Selector="Slider /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Width="20"
+                          Height="20">
+                        <Border Height="20"
+                                Width="20"
+                                CornerRadius="10"
+                                BorderThickness="2"
+                                BorderBrush="#FFF"
+                                Background="Transparent" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider[IsPointerOver=True]:pointerover /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Width="5"
+                          Height="20">
+                        <Border Height="20"
+                                Width="20"
+                                CornerRadius="10"
+                                BorderThickness="2"
+                                BorderBrush="#FFF"
+                                Background="Transparent" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider /template/ RepeatButton#PART_IncreaseButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Height="2"
+                            Background="LightGray" />
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider /template/ RepeatButton#PART_DecreaseButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Height="2"
+                            Background="Pink" />
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="*, Auto"
+          >
+        <Border DockPanel.Dock="Top"
+                Background="Black">
+            <Grid>
+                <Image
+                    asyncImageLoader:ImageLoader.Source="{Binding  ((models:MediaItem)CurrentMedia).Image}"
+                    Stretch="UniformToFill">
+                    <Image.OpacityMask>
+                        <LinearGradientBrush StartPoint="0% 0%"
+                                             EndPoint="100% 100%">
+                            <GradientStop Offset="0.4" Color="Black" />
+                            <GradientStop Offset="0.8" Color="Transparent" />
+                        </LinearGradientBrush>
+                    </Image.OpacityMask>
+                </Image>
+                <Image
+                    asyncImageLoader:ImageLoader.Source="https://img.freepik.com/premium-vector/abstract-white-grey-background-geometric-pattern_947276-518.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
+                    Stretch="UniformToFill"
+                    Opacity="0.2">
+                </Image>
+
+                <DockPanel LastChildFill="True"
+                           Margin="20">
+                    <DockPanel LastChildFill="True"
+                               DockPanel.Dock="Bottom">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <Button Classes="AppBarButton"
+                                    Command="{Binding SkipPreviousCommand}">
+                                <avalonia:Icon Value="mdi skip-previous" />
+                            </Button>
+                            <Button Classes="AppBarButton"
+                                    DockPanel.Dock="Right"
+                                    Command="{Binding TogglePauseCommand}"
+                                    Classes.IsPlaying="{Binding IsPlaying}">
+                                <Button.Styles>
+                                    <Style Selector="Button:not(.IsPlaying)">
+                                        <Setter Property="Content">
+                                            <Template>
+                                                <avalonia:Icon Value="mdi play" />
+                                            </Template>
+                                        </Setter>
+                                    </Style>
+                                    <Style Selector="Button.IsPlaying">
+                                        <Setter Property="Content">
+                                            <Template>
+                                                <avalonia:Icon Value="mdi pause" />
+                                            </Template>
+                                        </Setter>
+                                    </Style>
+                                </Button.Styles>
+                            </Button>
+                            <Button Classes="AppBarButton"
+                                    Command="{Binding SkipNextCommand}">
+                                <avalonia:Icon Value="mdi skip-next" />
+                            </Button>
+                            <Button Classes="AppBarButton"
+                                    IsVisible="{Binding CurrentMedia, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    DockPanel.Dock="Left"
+                                    VerticalAlignment="Center"
+                                    Classes.IsFavorite="{Binding ((models:MediaItem)CurrentMedia).IsFavorite}"
+                                    Command="{Binding ToggleFavoriteCommand}">
+                                <Button.Styles>
+                                    <Style Selector="Button:not(.IsFavorite)">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Foreground"
+                                                Value="#40FFFFFF" />
+                                    </Style>
+                                    <Style Selector="Button.IsFavorite">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Style>
+                                </Button.Styles>
+                                <avalonia:Icon Value="mdi heart" FontSize="16" ClipToBounds="False" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    DockPanel.Dock="Right">
+                            <Button Classes="AppBarButton"
+                                    DockPanel.Dock="Right"
+                                    VerticalAlignment="Center"
+
+                                    Classes.IsPlaylistOpen="{Binding PlaylistIsOpen}"
+                                    Command="{Binding TogglePlaylistIsVisibleCommand}">
+                                <Button.Styles>
+                                    <Style Selector="Button:not(.IsPlaylistOpen)">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Foreground"
+                                                Value="#40FFFFFF" />
+                                    </Style>
+                                    <Style Selector="Button.IsPlaylistOpen">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Style>
+                                </Button.Styles>
+                                <avalonia:Icon Value="mdi view-list" ClipToBounds="False" />
+                            </Button>
+                        </StackPanel>
+                        <Grid></Grid>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True"
+                               Margin="10,0"
+                               TextElement.FontSize="12"
+                               Height="30"
+                               TextElement.Foreground="#FFF"
+                               DockPanel.Dock="Bottom">
+                        <TextBlock Width="30"
+                                   Text="{Binding CurrentTime, StringFormat=m\\:ss, FallbackValue=0:00}" />
+                        <TextBlock Width="30"
+                                   Opacity="0.5"
+                                   TextAlignment="Right"
+                                   DockPanel.Dock="Right"
+                                   Text="{Binding ((models:MediaItem)CurrentMedia).Time, StringFormat=m\\:ss, FallbackValue=0:00}" />
+                        <Slider DockPanel.Dock="Top"
+                                Maximum="{Binding TotalTime}"
+                                Value="{Binding Position}"
+                                Margin="20,-17,20,0"
+                                MinHeight="5">
+                            <Interaction.Behaviors>
+                                <behaviors:SliderDragCommandBehavior FireOnDrag="False" FireOnPointerPressed="True"
+                                                                     DragCommand="{Binding SeekCommand}" />
+                            </Interaction.Behaviors>
+                        </Slider>
+                    </DockPanel>
+                    <controls:CoverView Size="Medium"
+                                        Source="{Binding  ((models:MediaItem)CurrentMedia).Image}" />
+                    <Grid Height="150">
+                        <StackPanel Spacing="3"
+                                    VerticalAlignment="Center"
+                                    Margin="20,0">
+
+                            <TextBlock
+                                Text="{Binding ((models:MediaItem)CurrentMedia).Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u, FallbackValue=НЕ ВОСПРОИЗВОДИТСЯ}"
+                                FontSize="20"
+                                TextTrimming="CharacterEllipsis"
+                                FontWeight="SemiBold"
+                                Foreground="#FFF" />
+                            <TextBlock Text="{Binding ((models:MediaItem)CurrentMedia).Artist}"
+                                       FontSize="16"
+                                       TextTrimming="CharacterEllipsis"
+                                       Foreground="#FFF"
+                                       FontWeight="Thin" />
+                        </StackPanel>
+                    </Grid>
+                </DockPanel>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" Height="340" IsVisible="{Binding PlaylistIsOpen}">
+            <DockPanel LastChildFill="True"
+                       Margin="10">
+                <Border DockPanel.Dock="Top"
+                        Height="48">
+                    <DockPanel LastChildFill="True">
+                        <Border Width="48"/>
+                        <TextBlock DockPanel.Dock="Right"
+                                   Width="100"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0"
+                                   Text="Длительность" />
+                        <TextBlock DockPanel.Dock="Right"
+                                   Width="200"
+                                   Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   Text="Исполнитель" />
+                        <TextBlock FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0"
+                                   Text="Название">
+                        </TextBlock>
+                    </DockPanel>
+                </Border>
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding PlaylistItem.Media}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:MediaItem">
+                                <Border Height="48">
+                                    <DockPanel LastChildFill="True">
+                                        <controls:CoverView Source="{Binding Image}" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Width="100"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10,0"
+                                                   Text="{Binding Time, StringFormat=m\\:ss}" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Width="200"
+                                                   Margin="10,0"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Artist}" />
+                                        <TextBlock FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10,0"
+                                                   Text="{Binding Name}">
+                                            <Classes.IsPlaying>
+                                                <MultiBinding
+                                                    Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                    <Binding Path="." />
+                                                    <Binding
+                                                        Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                </MultiBinding>
+                                            </Classes.IsPlaying>
+                                            <TextBlock.Styles>
+                                                <Style Selector="TextBlock:not(.IsPlaying)">
+                                                    <Setter Property="Foreground" Value="Gray" />
+                                                </Style>
+                                                <Style Selector="TextBlock.IsPlaying">
+                                                    <Setter Property="Foreground" Value="DeepPink" />
+                                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                                </Style>
+                                            </TextBlock.Styles>
+                                        </TextBlock>
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>

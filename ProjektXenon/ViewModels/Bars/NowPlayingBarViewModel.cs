@@ -1,0 +1,200 @@
+namespace ProjektXenon.ViewModels;
+
+public partial class NowPlayingBarViewModel : ViewModelBase
+{
+    #region Private Fields
+
+    private readonly MediaPlaybackService _playbackService;
+    private readonly TrackRepositoryService _trackRepository;
+    private readonly PlaylistFlyoutViewModel _playlistFlyout;
+    private readonly NowPlayingFlyoutViewModel _nowPlayingFlyout;
+
+    #endregion
+
+    #region Observable Fields
+
+    [ObservableProperty] private ICollectionItem? _currentMedia;
+    [ObservableProperty] private TimeSpan? _currentTime;
+    [ObservableProperty] private bool _isPlaying;
+    [ObservableProperty] private double _totalTime;
+    [ObservableProperty] private double _position;
+
+    #endregion
+
+    #region Constructor
+
+    public NowPlayingBarViewModel(MediaPlaybackService playbackService, TrackRepositoryService trackRepository, PlaylistFlyoutViewModel playlistFlyout, NowPlayingFlyoutViewModel nowPlayingFlyout)
+    {
+        _playbackService = playbackService;
+        _trackRepository = trackRepository;
+        _playlistFlyout = playlistFlyout;
+        _nowPlayingFlyout = nowPlayingFlyout;
+    }
+
+    #endregion
+
+    #region Commands Methods
+
+    [RelayCommand]
+    private void ToggleNowPlayingView()
+    {
+        var navMenu = IoC.Resolve<NavMenuFlyoutViewModel>();
+        navMenu.NavigateCommand.Execute(navMenu.Pages.OfType<NowPlayingPageViewModel>().FirstOrDefault());
+    }
+    [RelayCommand]
+    private void TogglePlaylistView()
+    {
+        _playlistFlyout.IsOpen = !_playlistFlyout.IsOpen;
+    }
+
+    private bool CanTogglePause() => CurrentMedia != null;
+
+    [RelayCommand(CanExecute = "CanTogglePause")]
+    private void TogglePause()
+    {
+        _playbackService.Pause();
+        
+        TogglePauseCommand.NotifyCanExecuteChanged();
+    }
+    private bool CanSkipNext()
+    {
+        if (_playbackService.Playlist != null)
+        {
+            if (CurrentMedia != null)
+            {
+                var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
+                if (index != _playbackService.Playlist.Media.Count - 1)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    [RelayCommand(CanExecute = "CanSkipNext")]
+    private void SkipNext()
+    {
+        if (_playbackService.Playlist != null)
+        {
+            if (CurrentMedia != null)
+            {
+                var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
+                if (index != _playbackService.Playlist.Media.Count - 1)
+                {
+                    index++;
+                    var media = _playbackService.Playlist.Media[index];
+                    _playbackService.OpenPlayAsync(media);
+                }
+            }
+        }
+    }
+    
+    private bool CanSkipPrevious()
+    {
+        if (_playbackService.Playlist != null)
+        {
+            if (CurrentMedia != null)
+            {
+                var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
+                if (index != 0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    [RelayCommand(CanExecute = "CanSkipPrevious")]
+    private void SkipPrevious()
+    {
+        var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
+        if (index != 0)
+        {
+            index--;
+            var media = _playbackService.Playlist.Media[index];
+            _playbackService.OpenPlayAsync(media);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ToggleFavorite()
+    {
+        (CurrentMedia as Models.MediaItem).IsFavorite = !(CurrentMedia as Models.MediaItem).IsFavorite;
+        var favs = await _trackRepository.GetFavoritesAsync();
+        List<Models.MediaItem> list = [];
+        if (favs != null)
+        {
+            list.AddRange(favs);
+        }
+        
+        if ((CurrentMedia as Models.MediaItem).IsFavorite)
+        {
+            if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) == null)
+            {
+                list.Add(CurrentMedia as Models.MediaItem);
+            }
+        }
+        else
+        {
+            if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) is Models.MediaItem media)
+            {
+                list.Remove(media);
+            }
+        }
+
+        
+        await _trackRepository.ChangeFavoritesAsync(list);
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public void Init()
+    {
+        _playbackService.TimeChanged += PlaybackServiceOnCurrentTimeChanged;
+        //_playbackService.MediaPlayEnded += PlaybackServiceOnMediaPlayEnded;
+        _playbackService.StateChanged += PlaybackServiceOnStateChanged;
+        _playbackService.MediaChanged += PlaybackServiceOnMediaChanged;
+    }
+
+    #endregion
+
+    #region Events Handlers
+
+    private void PlaybackServiceOnMediaChanged(object? sender, Models.MediaItem e)
+    {
+        CurrentMedia = e;
+    }
+    
+    private void PlaybackServiceOnStateChanged(object? sender, bool e)
+    {
+        IsPlaying = e;
+        SkipPreviousCommand.NotifyCanExecuteChanged();
+        SkipNextCommand.NotifyCanExecuteChanged();
+        togglePauseCommand.NotifyCanExecuteChanged();
+
+        if (_playbackService.Playlist != null)
+            foreach (var item in _playbackService.Playlist.Media)
+            {
+                (item as Models.MediaItem).IsPlaying = false;
+                if (item.Id == CurrentMedia.Id)
+                {
+                    (item as Models.MediaItem).IsPlaying = true;
+                }
+            }
+    }
+
+    private void PlaybackServiceOnCurrentTimeChanged(object? sender, TimeSpan e)
+    {
+        CurrentTime = e;
+        Position = CurrentTime.Value.TotalSeconds;
+        TotalTime = (CurrentMedia as Models.MediaItem).Time.Value.TotalSeconds;
+    }
+
+    #endregion
+}

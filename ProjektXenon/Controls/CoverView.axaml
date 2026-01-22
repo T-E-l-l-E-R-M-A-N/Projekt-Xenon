@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:ProjektXenon.Controls"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjektXenon.Controls.CoverView">
+    <UserControl.Styles>
+        <Style Selector="controls|CoverView[Size=Small]">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="LightGray"
+                            Width="48"
+                            Height="48">
+                        <Grid>
+                            <avalonia:Icon FontSize="28"
+                                           Value="mdi headphones"
+                                           Foreground="White"/>
+                            <Image asyncImageLoader:ImageLoader.Source="{TemplateBinding Source}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="controls|CoverView[Size=Medium]">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border BorderBrush="Gray"
+                            BorderThickness="1"
+                            Width="150"
+                            Height="150">
+                        <Border.Background>
+                            <ImageBrush asyncImageLoader:ImageBrushLoader.Source="https://i.pinimg.com/originals/f1/c4/93/f1c493e61ac0090611af9160abc0d2aa.jpg"
+                                        Stretch="UniformToFill"
+                                        Opacity="0.4"></ImageBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Image asyncImageLoader:ImageLoader.Source="{TemplateBinding Source, Mode=TwoWay}"/>
+                            
+                            <Border Width="48"
+                                    Height="48"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Background="DarkGray"
+                                    Margin="8">
+                                <Grid>
+                                    <avalonia:Icon FontSize="28"
+                                                   Value="mdi headphones"
+                                                   Foreground="White"/>
+                                    
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="controls|CoverView[Size=Large]">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border BorderBrush="Gray"
+                            BorderThickness="1"
+                            Width="270"
+                            Height="270">
+                        <Border.Background>
+                            <ImageBrush asyncImageLoader:ImageBrushLoader.Source="https://i.pinimg.com/originals/f1/c4/93/f1c493e61ac0090611af9160abc0d2aa.jpg"
+                                        Stretch="UniformToFill"
+                                        Opacity="0.4"></ImageBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Image asyncImageLoader:ImageLoader.Source="{TemplateBinding Source}"/>
+                            <Border Width="48"
+                                    Height="48"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Background="LightGray"
+                                    Margin="8">
+                                <Grid>
+                                    <avalonia:Icon FontSize="28"
+                                                   Value="mdi headphones"
+                                                   Foreground="White"/>
+                                    
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

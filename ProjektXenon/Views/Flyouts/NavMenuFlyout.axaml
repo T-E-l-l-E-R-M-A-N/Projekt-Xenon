@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.ViewModels"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.ValueConverters"
+             xmlns:views="clr-namespace:ProjektXenon.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjektXenon.Views.NavMenuFlyout"
+             Background="#1E1E1E"
+             x:DataType="viewModels:NavMenuFlyoutViewModel">
+    <Border Classes="NavMenu"
+            ClipToBounds="True"
+            Classes.IsOpen="{Binding IsOpen}"
+            BorderThickness="0"
+            BorderBrush="LightGray">
+        <Border.Background>
+            <ImageBrush
+                asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-white-grey-background-geometric-pattern_947276-518.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
+                Stretch="UniformToFill"
+                Opacity="0.2">
+            </ImageBrush>
+        </Border.Background>
+        <Border.Transitions>
+            <Transitions>
+                <DoubleTransition Easing="CubicEaseOut" Property="Width" Duration="0:0:0.5" />
+            </Transitions>
+        </Border.Transitions>
+        <ItemsControl ItemsSource="{Binding Pages}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Classes="NavMenuItemButton" Command="{Binding $parent[ItemsControl].((viewModels:NavMenuFlyoutViewModel)DataContext).NavigateCommand}"
+                            CommandParameter="{Binding .}"
+                            
+                            Content="{Binding Name}" >
+                        <Classes.IsSelected>
+                            <MultiBinding Converter="{valueConverters:NavMenuActiveItemConverter}">
+                                <Binding Path="."/>
+                                <Binding Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).CurrentPage"/>
+                            </MultiBinding>
+                        </Classes.IsSelected>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Border>
+</UserControl>

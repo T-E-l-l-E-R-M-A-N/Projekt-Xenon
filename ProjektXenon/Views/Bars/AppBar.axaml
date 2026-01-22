@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.ViewModels"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:views="clr-namespace:ProjektXenon.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjektXenon.Views.AppBar"
+             x:DataType="viewModels:AppBarViewModel">
+   <Grid>
+       <Grid x:Name="DesktopLayout">
+           <Border DockPanel.Dock="Top"
+                   Height="48">
+               <Border Height="48"
+                       VerticalAlignment="Bottom">
+                   <DockPanel LastChildFill="True"
+                              Margin="0,0">
+                       <Button Classes="AppBarButton"
+                               Background="#820B49"
+                               Foreground="#FFF"
+                               Command="{Binding ToggleNavMenuCommand}">
+                           <avalonia:Icon Value="mdi menu" />
+                       </Button>
+                       <Button DockPanel.Dock="Right" Classes="AppBarButton"
+                               x:Name="DesktopSearchButton"
+                               Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).SearchCommand}"
+                               CommandParameter="{Binding #SearchBox.Text, UpdateSourceTrigger=PropertyChanged}">
+                           <avalonia:Icon Value="mdi magnify"
+                                          RenderTransform="scaleX(-1)" />
+                       </Button>
+                       <Grid DockPanel.Dock="Right">
+                           <TextBox x:Name="SearchBox"
+                                    Watermark="Введите название трека"
+                                    Classes="AppBarSearchBox">
+                               <TextBox.KeyBindings>
+                                   <KeyBinding Gesture="Return"
+                                               Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).SearchCommand}"
+                                               CommandParameter="{Binding #SearchBox.Text, UpdateSourceTrigger=PropertyChanged}"/>
+                               </TextBox.KeyBindings>
+                           </TextBox>
+                       </Grid>
+                       <TextBlock Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).CurrentPage.Name}"
+                                  Margin="14,0,0,5"
+                                  ClipToBounds="False"
+                                  VerticalAlignment="Center"
+                                  FontSize="24"
+                                  FontWeight="Thin" />
+                   </DockPanel>
+               </Border>
+           </Border>
+       </Grid>
+       <Grid x:Name="MobileLayout">
+           <Border DockPanel.Dock="Top"
+                   
+                   MinHeight="48" 
+                   >
+               <StackPanel>
+                   <DockPanel LastChildFill="True"
+                              x:Name="MobileBarButtons">
+                       <Button Classes="AppBarButton"
+                               Command="{Binding ToggleNavMenuCommand}">
+                           <avalonia:Icon Value="mdi menu" />
+                       </Button>
+                       <Border Height="48">
+                           <TextBlock Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).CurrentPage.Name}"
+                                      Margin="14,0,0,5"
+                                      ClipToBounds="False"
+                                      VerticalAlignment="Center"
+                                      FontSize="24"
+                                      FontWeight="Thin" />
+                       </Border>
+                   </DockPanel>
+                   
+               </StackPanel>
+           </Border>
+       </Grid>
+   </Grid>
+</UserControl>

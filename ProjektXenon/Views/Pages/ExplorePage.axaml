@@ -1,0 +1,188 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.ViewModels"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:controls="clr-namespace:ProjektXenon.Controls"
+             xmlns:behaviors="clr-namespace:ProjektXenon.Behaviors"
+             xmlns:views="clr-namespace:ProjektXenon.Views"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="600"
+             x:Class="ProjektXenon.Views.ExplorePage"
+             x:DataType="viewModels:ExplorePageViewModel">
+    <Grid>
+        <Grid x:Name="DesktopLayout" IsVisible="False">
+            <DockPanel LastChildFill="True">
+                <Border VerticalAlignment="Top"
+                        DockPanel.Dock="Top"
+                        Height="50">
+                    <Border.Background>
+                        <ImageBrush
+                            asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-pink-background_67845-947.jpg?semt=ais_hybrid&amp;w=740"
+                            Stretch="UniformToFill"
+                            Opacity="0.0">
+                        </ImageBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="10,0"
+                                Spacing="8">
+                        <Button Classes="ContextActionButton"
+                                Command="{Binding PlayAllCommand}">
+                            <TextBlock Classes="ButtonCaption"
+                                       Text="Воспроизвести" />
+                        </Button>
+                        <Button Classes="ContextActionButton"
+
+                                Command="{Binding ShuffleCommand}">
+                            <TextBlock Classes="ButtonCaption"
+                                       Text="Случайный выбор" />
+                        </Button>
+                        <Grid></Grid>
+                    </StackPanel>
+                </Border>
+
+                <ScrollViewer>
+                    <StackPanel>
+                        <ScrollViewer DockPanel.Dock="Top"
+                                      VerticalScrollBarVisibility="Disabled"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      Height="270">
+                            <StackPanel Grid.Row="0"
+
+                                        Margin="20,0,0,0">
+                                <Border Height="48">
+                                    <Button Classes="TabBarItemButton"
+                                            Classes.tabIsActive="false"
+                                            VerticalAlignment="Bottom"
+                                            Content="НРАВИТСЯ">
+                                    </Button>
+                                </Border>
+                                <ItemsControl ItemsSource="{Binding Favorites}"
+                                              Margin="0,8"
+                                              ItemTemplate="{DynamicResource TrackListTileItemTemplate}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="8" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <StackPanel Grid.Row="1"
+                                    Margin="20,0,0,0">
+                            <Border Height="48">
+                                <Button Classes="TabBarItemButton"
+                                        Classes.tabIsActive="true"
+                                        Content="ПОПУЛЯРНОЕ"
+                                        VerticalAlignment="Bottom">
+                                </Button>
+                            </Border>
+                            <ItemsControl ItemsSource="{Binding Tracks}"
+                                          Margin="0,8"
+                                          ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
+        <Grid x:Name="MobileLayout">
+            <DockPanel LastChildFill="True">
+                <Border VerticalAlignment="Top"
+                        DockPanel.Dock="Bottom"
+                        Height="50">
+                    <Border.Background>
+                        <ImageBrush
+                            asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-pink-background_67845-947.jpg?semt=ais_hybrid&amp;w=740"
+                            Stretch="UniformToFill"
+                            Opacity="0.0">
+                        </ImageBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="10,0"
+                                Spacing="8">
+                        <Button Classes="ContextActionButton"
+                                Command="{Binding PlayAllCommand}">
+                            <TextBlock Classes="ButtonCaption"
+                                       Text="Воспроизвести" />
+                        </Button>
+                        <Button Classes="ContextActionButton"
+
+                                Command="{Binding ShuffleCommand}">
+                            <TextBlock Classes="ButtonCaption"
+                                       Text="Случайный выбор" />
+                        </Button>
+                        <Grid></Grid>
+                    </StackPanel>
+                </Border>
+                <controls:PanoramaCarousel SlideDuration="0:0:0.22"
+                                           CenterSelectedItem="False"
+                                           Spacing="20"
+                                           x:Name="MobileHub"
+                                           Margin="10,0">
+                    <Interaction.Behaviors>
+                        <behaviors:SwipeCommandBehavior MinSwipeDistance="50"
+                                                        MaxVerticalDrift="30"
+                                                        AutoChangeSelectedIndex="True" />
+                    </Interaction.Behaviors>
+                    <Border Width="340">
+                        <DockPanel LastChildFill="True">
+                            <Border Height="48" DockPanel.Dock="Top">
+                                <Button Classes="TabBarItemButton"
+                                        Content="НРАВИТСЯ"
+                                        VerticalAlignment="Bottom">
+                                </Button>
+                            </Border>
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                                <ItemsControl ItemsSource="{Binding Favorites}"
+                                              Margin="0,8"
+                                              ItemTemplate="{DynamicResource TrackListTileItemTemplate}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"
+                                                       ItemsAlignment="Start"
+                                                       ItemSpacing="8"
+                                                       LineSpacing="8" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Border>
+                    <Border Width="270">
+                        <DockPanel LastChildFill="True">
+                            <Border Height="48" DockPanel.Dock="Top">
+                                <Button Classes="TabBarItemButton"
+                                        Classes.tabIsActive="true"
+                                        Content="ПОПУЛЯРНОЕ"
+                                        VerticalAlignment="Bottom">
+                                </Button>
+                            </Border>
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                                <ItemsControl ItemsSource="{Binding Tracks}"
+                                              Margin="0,8"
+                                              ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Border>
+                </controls:PanoramaCarousel>
+            </DockPanel>
+        </Grid>
+    </Grid>
+
+</UserControl>
