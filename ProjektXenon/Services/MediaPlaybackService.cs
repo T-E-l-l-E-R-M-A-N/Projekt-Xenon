@@ -1,10 +1,12 @@
-namespace ProjektXenon.ViewModels;
+using System.Collections.ObjectModel;
+
+namespace ProjektXenon.Services;
 
 public class MediaPlaybackService   
 {
     #region Private Fields
 
-    private OsXAudioEngine _audioEngine;
+    private UniversalAudioEngine _audioEngine;
 
     #endregion
 
@@ -26,7 +28,7 @@ public class MediaPlaybackService
 
     #region Constructor
 
-    public MediaPlaybackService(OsXAudioEngine audioEngine)
+    public MediaPlaybackService(UniversalAudioEngine audioEngine)
     {
         _audioEngine = audioEngine;
     }
@@ -64,6 +66,12 @@ public class MediaPlaybackService
             CurrentMedia.IsPlaying = true;
             MediaChanged?.Invoke(this, CurrentMedia);
         }
+    }
+
+    public async Task OpenPlayAsync(IEnumerable<MediaItem> media)
+    {
+        SetPlaylist(new PlaylistItem() {Media = new ObservableCollection<MediaItem>(media)});
+        await OpenPlayAsync(Playlist.Media.FirstOrDefault());
     }
     
     public void Pause()

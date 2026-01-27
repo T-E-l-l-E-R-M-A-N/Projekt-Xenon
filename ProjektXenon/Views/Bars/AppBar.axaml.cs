@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using ProjektXenon.Helpers;
+using ProjektXenon.Services;
 using ProjektXenon.ViewModels;
 
 namespace ProjektXenon.Views;
@@ -42,11 +44,13 @@ public partial class AppBar : UserControl
             {
                 SearchBox.IsVisible = false;
                 DesktopSearchButton.IsVisible = false;
+                MobileSearchButton.IsVisible = false;
             }
             else
             {
                 SearchBox.IsVisible = true;
                 DesktopSearchButton.IsVisible = true;
+                MobileSearchButton.IsVisible = true;
             }
         }
     }

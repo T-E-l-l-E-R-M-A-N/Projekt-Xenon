@@ -2,9 +2,9 @@ using System.ComponentModel;
 using System.Timers;
 using ManagedBass;
 
-namespace ProjektXenon.ViewModels;
+namespace ProjektXenon.Services;
 
-public class OsXAudioEngine
+public class UniversalAudioEngine
 {
     #region Private Fields
 

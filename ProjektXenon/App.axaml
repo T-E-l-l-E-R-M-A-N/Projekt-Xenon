@@ -2,6 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:ProjektXenon"
              xmlns:c="http://schemas.superdev.ch/valueconverters/2016/xaml"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.ValueConverters"
+             xmlns:viewModels="clr-namespace:ProjektXenon.ViewModels"
+             xmlns:views="clr-namespace:ProjektXenon.Views"
+             xmlns:models="clr-namespace:ProjektXenon.Models"
+             xmlns:controls="clr-namespace:ProjektXenon.Controls"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              x:Class="ProjektXenon.App"
              RequestedThemeVariant="Default">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -12,9 +19,786 @@
 
     <Application.Styles>
         <FluentTheme />
+
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+
+        <Style Selector="Border.ButtonIconCircle">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="{Binding $self.Bounds.Width}" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="{Binding $parent[Button].Foreground}"></Setter>
+        </Style>
+
+        <Style Selector="Button:pressed">
+            <Setter Property="RenderTransform" Value="{x:Null}" />
+        </Style>
+
+
+        <Style Selector="Button.ContextActionButton">
+            <Setter Property="MinWidth" Value="70" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Foreground" Value="DeepPink" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}"
+                                          Content="{TemplateBinding Content}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="HotPink" />
+                <Setter Property="BorderBrush" Value="HotPink" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Foreground" Value="Purple" />
+                <Setter Property="BorderBrush" Value="Purple" />
+
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="BorderBrush" Value="LightGray" />
+                <Setter Property="Foreground" Value="LightGray" />
+            </Style>
+        </Style>
+
+        <Style Selector="StackPanel.ContextActionButtonStack">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="14" />
+        </Style>
+
+        <Style Selector="TextBlock.ButtonCaption">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style Selector="avalonia|Icon.ButtonIconContent">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="ClipToBounds" Value="False" />
+        </Style>
+
+        <Style Selector="Button.NowPlayingBarButton">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="{Binding $parent[views:MainView].Foreground}" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Foreground" Value="{Binding $parent[views:MainView].Foreground}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding Content}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="{Binding $parent[views:MainView].Foreground}" />
+                <Setter Property="Background" Value="LightGray" />
+                <Setter Property="BorderBrush" Value="{Binding $parent[views:MainView].Foreground}" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Foreground" Value="{Binding $parent[views:MainView].Foreground}" />
+                <Setter Property="Background" Value="{Binding $parent[views:MainView].Background}" />
+                <Setter Property="BorderBrush" Value="{Binding $parent[views:MainView].Background}" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="BorderBrush" Value="LightGray" />
+                <Setter Property="Foreground" Value="LightGray" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </Style>
+        <Style Selector="Button.NowPlayingBarButton avalonia|Icon">
+            <Setter Property="FontSize" Value="20" />
+        </Style>
+
+
+        <Style Selector="Button.AppBarButton">
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Foreground" Value="{Binding $parent[views:MainView].Foreground}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding Content}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="HotPink" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="Purple" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="LightGray" />
+            </Style>
+        </Style>
+        <Style Selector="Button.AppBarButton avalonia|Icon">
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+
+        <Style Selector="TextBox.AppBarSearchBox">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Width="320"
+                            DockPanel.Dock="Right"
+                            BorderBrush="DimGray"
+                            Background="LightGray"
+                            Cursor="IBeam"
+                            BorderThickness="0"
+                            Height="28"
+                            Padding="12,0">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <ContentPresenter Grid.Column="0" Grid.ColumnSpan="1"
+                                              Content="{TemplateBinding InnerLeftContent}" />
+                            <ScrollViewer Grid.Column="1" Grid.ColumnSpan="1"
+                                          VerticalAlignment="Center"
+                                          HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                          VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                                <Panel>
+                                    <TextBlock Name="watermark"
+                                               Opacity="0.5"
+                                               Text="{TemplateBinding Watermark}"
+                                               TextAlignment="{TemplateBinding TextAlignment}"
+                                               TextWrapping="{TemplateBinding TextWrapping}"
+                                               IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                                    <TextPresenter Name="PART_TextPresenter"
+                                                   Text="{TemplateBinding Text, Mode=TwoWay}"
+                                                   CaretIndex="{TemplateBinding CaretIndex}"
+                                                   SelectionStart="{TemplateBinding SelectionStart}"
+                                                   SelectionEnd="{TemplateBinding SelectionEnd}"
+                                                   TextAlignment="{TemplateBinding TextAlignment}"
+                                                   TextWrapping="{TemplateBinding TextWrapping}"
+                                                   PasswordChar="{TemplateBinding PasswordChar}"
+                                                   RevealPassword="{TemplateBinding RevealPassword}"
+                                                   SelectionBrush="{TemplateBinding SelectionBrush}"
+                                                   SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                                   CaretBrush="{TemplateBinding CaretBrush}" />
+                                </Panel>
+                            </ScrollViewer>
+                            <ContentPresenter Grid.Column="2" Grid.ColumnSpan="1"
+                                              Content="{TemplateBinding InnerRightContent}" />
+                        </Grid>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.TabBarItemButton">
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Foreground" Value="LightGray" />
+
+            <Setter Property="FontWeight" Value="Thin" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" Content="{TemplateBinding Content}"
+                                          TextElement.FontWeight="Thin" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="Pink" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Foreground" Value="DeepPink" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="LightGray" />
+            </Style>
+        </Style>
+
+        <Style Selector="Button.TabBarItemButton:not(.tabIsActive)">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+        <Style Selector="Button.TabBarItemButton.tabIsActive">
+            <Setter Property="Foreground" Value="{Binding $parent[views:MainView].Foreground}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="34" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="Button.NavMenuItemButton">
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="FontWeight" Value="Thin" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <DockPanel VerticalAlignment="Center"
+                                   LastChildFill="True"
+                                   Margin="{TemplateBinding Padding}">
+                            <avalonia:Icon FontSize="20" Margin="0,0,0,0"
+                                           Opacity="1"
+                                           Value="{Binding ., Converter={valueConverters:NavMenuIconConverter}, DataType=viewModels:IPage}" />
+                            <StackPanel Spacing="2"
+                                        Margin="24,0,0,0"
+                                        VerticalAlignment="Center">
+                                <ContentPresenter
+                                    Content="{TemplateBinding Content, Converter={StaticResource StringCaseConverter}, ConverterParameter=l}" />
+                                <TextBlock FontSize="12" Opacity="0.7" x:DataType="viewModels:IPage"
+                                           Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia.Name}">
+                                    <TextBlock.IsVisible>
+                                        <MultiBinding Converter="{valueConverters:IsNowPlayingPageConverter}">
+                                            <Binding Path="." />
+                                            <Binding
+                                                Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                        </MultiBinding>
+                                    </TextBlock.IsVisible>
+                                </TextBlock>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="Pink" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="DeepPink" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="#20FFFFFF" />
+            </Style>
+        </Style>
+
+        <Style Selector="Button.NavMenuItemButton.IsSelected">
+            <Setter Property="IsVisible" Value="False" />
+            <Setter Property="Foreground" Value="DeepPink" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="Slider /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Width="20"
+                          Height="20">
+                        <Border Height="20"
+                                Width="20"
+                                CornerRadius="10"
+                                BorderThickness="2"
+                                BorderBrush="#FFF"
+                                Background="Transparent" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider[IsPointerOver=True]:pointerover /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Width="5"
+                          Height="20">
+                        <Border Height="20"
+                                Width="20"
+                                CornerRadius="10"
+                                BorderThickness="2"
+                                BorderBrush="#FFF"
+                                Background="Transparent" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider /template/ RepeatButton#PART_IncreaseButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Height="20"
+                          Background="Transparent">
+                        <Border Height="2"
+                                Background="LightGray" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider /template/ RepeatButton#PART_DecreaseButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Height="20"
+                          Background="Transparent">
+                        <Border Height="2"
+                                Background="White" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
     </Application.Styles>
 
     <Application.Resources>
         <c:StringCaseConverter x:Key="StringCaseConverter" />
+
+        <DataTemplate x:Key="TrackListTileItemTemplate"
+                      DataType="models:MediaItem">
+            <Button Background="Transparent"
+                    Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                    CommandParameter="{Binding .}"
+                    Padding="0"
+                    Width="160">
+                <Button.Template>
+                    <ControlTemplate>
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </ControlTemplate>
+                </Button.Template>
+                <Border Width="160"
+
+
+                        Background="White">
+                    <StackPanel>
+                        <Grid Width="160"
+                              Height="160">
+                            <avalonia:Icon FontSize="48"
+                                           Foreground="Gray"
+                                           Value="mdi headphones" />
+                            <Image asyncImageLoader:ImageLoader.Source="{Binding Image}" Stretch="UniformToFill" />
+                            <Button Classes="AppBarButton"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    BorderThickness="0"
+                                    
+                                    Classes.IsFavorite="{Binding IsFavorite, DataType=models:MediaItem}"
+                                    Command="{Binding $parent[ItemsControl].((viewModels:MainViewModel)DataContext).NowPlaying.ToggleFavoriteCommand}">
+                                <Button.Styles>
+                                    <Style Selector="Button:not(.IsFavorite)">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Foreground"
+                                                Value="Transparent" />
+                                    </Style>
+                                    <Style Selector="Button.IsFavorite">
+                                        <Setter Property="Background" Value="DeepPink" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Style>
+                                </Button.Styles>
+                                <avalonia:Icon Value="mdi heart" FontSize="18" ClipToBounds="False" />
+                            </Button>
+                            
+                            <ProgressBar CornerRadius="0"
+                                         Background="Transparent"
+                                         Foreground="DeepPink"
+                                         VerticalAlignment="Bottom"
+                                         MinHeight="2"
+                                         Width="160"
+                                         MinWidth="100"
+                                         Height="5"
+                                         Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                         Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                <ProgressBar.IsVisible>
+                                    <MultiBinding
+                                        Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                        <Binding Path="." />
+                                        <Binding
+                                            Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                    </MultiBinding>
+                                </ProgressBar.IsVisible>
+                            </ProgressBar>
+                        </Grid>
+                        <Border Height="50">
+                            <DockPanel LastChildFill="True">
+                                <Border Width="30"
+                                        Height="30"
+                                        DockPanel.Dock="Right"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Margin="0,0,10,0"
+                                        Background="{Binding $parent[views:MainView].Background}">
+                                    <Border.IsVisible>
+                                        <MultiBinding
+                                            Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                            <Binding Path="." />
+                                            <Binding
+                                                Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                        </MultiBinding>
+                                    </Border.IsVisible>
+                                    <avalonia:Icon FontSize="20"
+                                                   Value="mdi play"
+                                                   Foreground="Black" />
+                                </Border>
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="10,0"
+                                           FontSize="16"
+                                           FontWeight="Light"
+                                           TextTrimming="CharacterEllipsis"
+                                           Text="{Binding Name}"/>
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="TrackListRowItemTemplate"
+                      DataType="models:MediaItem">
+            <Button Background="Transparent"
+                    Margin="0,0,8,8"
+                    Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                    CommandParameter="{Binding .}"
+                    Width="300">
+                <Button.Template>
+                    <ControlTemplate>
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </ControlTemplate>
+                </Button.Template>
+                <Border Padding="10" Background="White">
+                    <DockPanel LastChildFill="True">
+
+                        <Border Width="48"
+                                Height="48"
+
+
+                                Background="White">
+                            <Grid>
+                                <avalonia:Icon FontSize="24"
+                                               Foreground="Gray"
+                                               Value="mdi headphones" />
+                                <Image asyncImageLoader:ImageLoader.Source="{Binding Image}" />
+                                <ProgressBar CornerRadius="0"
+                                             Background="Transparent"
+                                             Foreground="DeepPink"
+                                             DockPanel.Dock="Bottom"
+                                             MinHeight="2"
+                                             Height="5"
+                                             Width="48"
+                                             MinWidth="48"
+                                             VerticalAlignment="Bottom"
+                                             Margin="0,0"
+                                             Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                             Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                    <ProgressBar.IsVisible>
+                                        <MultiBinding
+                                            Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                            <Binding Path="." />
+                                            <Binding
+                                                Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                        </MultiBinding>
+                                    </ProgressBar.IsVisible>
+                                </ProgressBar>
+                            </Grid>
+                        </Border>
+                        <Button Classes="AppBarButton"
+                                DockPanel.Dock="Right"
+                                BorderThickness="0"
+                                Margin="0,0"
+                                Classes.IsFavorite="{Binding IsFavorite, DataType=models:MediaItem}"
+                                Command="{Binding $parent[ItemsControl].((viewModels:MainViewModel)DataContext).NowPlaying.ToggleFavoriteCommand}">
+                            <Button.Styles>
+                                <Style Selector="Button:not(.IsFavorite)">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Foreground"
+                                            Value="Transparent" />
+                                </Style>
+                                <Style Selector="Button.IsFavorite">
+                                    <Setter Property="Foreground" Value="DeepPink" />
+                                    <Setter Property="Background" Value="White" />
+                                </Style>
+                            </Button.Styles>
+                            <avalonia:Icon Value="mdi heart"
+                                           Foreground="{Binding $parent[Button].Foreground}" FontSize="20"
+                                           ClipToBounds="False" />
+
+                        </Button>
+                        <StackPanel Margin="8,0">
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="5">
+                                <avalonia:Icon FontSize="16"
+                                               Value="mdi play"
+                                               Foreground="DeepPink" >
+                                    <Border.IsVisible>
+                                        <MultiBinding
+                                            Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                            <Binding Path="." />
+                                            <Binding
+                                                Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                        </MultiBinding>
+                                    </Border.IsVisible>
+                                </avalonia:Icon>
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="16"
+                                           TextTrimming="CharacterEllipsis"
+                                           Text="{Binding Name}"/>
+                            </StackPanel>
+                            <DockPanel LastChildFill="True">
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Opacity="0.7"
+                                           TextTrimming="CharacterEllipsis"
+                                           Text="{Binding Time, StringFormat=m\\:ss}"/>
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="5,0"
+                                           FontSize="12"
+                                           Opacity="1"
+                                           TextTrimming="CharacterEllipsis"
+                                           Text="{Binding Artist}"/>
+                            </DockPanel>
+                            
+                            
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="TrackListTileDetailItemTemplate" DataType="models:MediaItem">
+            <Button Background="Transparent"
+                    Margin="0,0,8,8"
+                    Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                    CommandParameter="{Binding .}"
+                    Width="300">
+                <Button.Template>
+                    <ControlTemplate>
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </ControlTemplate>
+                </Button.Template>
+                <Border Height="150">
+                    <Grid>
+                        <DockPanel LastChildFill="True">
+
+                            <Border Width="150"
+                                    Height="150"
+
+
+                                    Background="LightGray">
+                                <Grid>
+                                    <controls:CoverView Source="{Binding Image}" Size="Medium" />
+                                    <ProgressBar CornerRadius="0"
+                                                 Background="Gray"
+                                                 Foreground="DeepPink"
+                                                 DockPanel.Dock="Bottom"
+                                                 MinHeight="5"
+                                                 Height="5"
+                                                 MinWidth="100"
+                                                 VerticalAlignment="Bottom"
+                                                 Width="150"
+                                                 Margin="0,0"
+                                                 Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                                 Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                        <ProgressBar.IsVisible>
+                                            <MultiBinding
+                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                <Binding Path="." />
+                                                <Binding
+                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                            </MultiBinding>
+                                        </ProgressBar.IsVisible>
+                                    </ProgressBar>
+                                    <Border Width="48"
+                                            Height="48"
+                                            Classes="AppBarButton"
+                                            Margin="8"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Bottom"
+                                            Background="Black">
+                                        <Border.IsVisible>
+                                            <MultiBinding
+                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                <Binding Path="." />
+                                                <Binding
+                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                        <avalonia:Icon FontSize="20"
+                                                       Value="mdi play"
+                                                       Foreground="DeepPink" />
+                                    </Border>
+                                    <Button Classes="AppBarButton"
+                                            BorderThickness="0"
+                                            Margin="0,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Classes.IsFavorite="{Binding IsFavorite, DataType=models:MediaItem}"
+                                            Command="{Binding $parent[ItemsControl].((viewModels:MainViewModel)DataContext).NowPlaying.ToggleFavoriteCommand}">
+                                        <Button.Styles>
+                                            <Style Selector="Button:not(.IsFavorite)">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Foreground"
+                                                        Value="Transparent" />
+                                            </Style>
+                                            <Style Selector="Button.IsFavorite">
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </Style>
+                                        </Button.Styles>
+                                        <avalonia:Icon Value="mdi heart-outline"
+                                                       Foreground="{Binding $parent[Button].Foreground}"
+                                                       FontSize="18"
+                                                       ClipToBounds="False" />
+
+                                    </Button>
+                                </Grid>
+                            </Border>
+                            <StackPanel Margin="8,0"
+                                        VerticalAlignment="Bottom"
+                                        Spacing="8">
+                                <controls:TrackLabel Margin="0,0"
+                                                     VerticalAlignment="Center"
+                                                     Title="{Binding Name}"
+                                                     Subtitle="{Binding Artist}" />
+                                <TextBlock Text="{Binding Time,StringFormat=m\\:ss}"
+                                           Opacity="0.7" />
+
+                            </StackPanel>
+                        </DockPanel>
+                    </Grid>
+
+                </Border>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="TrackListRowDetailItemTemplate" DataType="models:MediaItem">
+            <Button Background="Transparent"
+                    Margin="0,0,8,8"
+                    Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                    CommandParameter="{Binding .}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </ControlTemplate>
+                </Button.Template>
+                <Border Height="150">
+                    <Grid>
+                        <DockPanel LastChildFill="True">
+
+                            <Border Width="150"
+                                    Height="150"
+
+
+                                    Background="LightGray">
+                                <Grid>
+                                    <controls:CoverView Source="{Binding Image}" Size="Medium" />
+                                    <ProgressBar CornerRadius="0"
+                                                 Background="Gray"
+                                                 Foreground="DeepPink"
+                                                 DockPanel.Dock="Bottom"
+                                                 MinHeight="5"
+                                                 Height="5"
+                                                 MinWidth="100"
+                                                 VerticalAlignment="Bottom"
+                                                 Width="150"
+                                                 Margin="0,0"
+                                                 Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                                 Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                        <ProgressBar.IsVisible>
+                                            <MultiBinding
+                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                <Binding Path="." />
+                                                <Binding
+                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                            </MultiBinding>
+                                        </ProgressBar.IsVisible>
+                                    </ProgressBar>
+                                    <Border Width="48"
+                                            Height="48"
+                                            Classes="AppBarButton"
+                                            Margin="8"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Bottom"
+                                            Background="Black">
+                                        <Border.IsVisible>
+                                            <MultiBinding
+                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                <Binding Path="." />
+                                                <Binding
+                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                        <avalonia:Icon FontSize="20"
+                                                       Value="mdi play"
+                                                       Foreground="DeepPink" />
+                                    </Border>
+                                    <Button Classes="AppBarButton"
+                                            BorderThickness="0"
+                                            Margin="0,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Classes.IsFavorite="{Binding IsFavorite, DataType=models:MediaItem}"
+                                            Command="{Binding $parent[ItemsControl].((viewModels:MainViewModel)DataContext).NowPlaying.ToggleFavoriteCommand}">
+                                        <Button.Styles>
+                                            <Style Selector="Button:not(.IsFavorite)">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Foreground"
+                                                        Value="Transparent" />
+                                            </Style>
+                                            <Style Selector="Button.IsFavorite">
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </Style>
+                                        </Button.Styles>
+                                        <avalonia:Icon Value="mdi heart-outline"
+                                                       Foreground="{Binding $parent[Button].Foreground}"
+                                                       FontSize="18"
+                                                       ClipToBounds="False" />
+
+                                    </Button>
+                                </Grid>
+                            </Border>
+                            <StackPanel Margin="8,0"
+                                        VerticalAlignment="Bottom"
+                                        Spacing="8">
+                                <controls:TrackLabel Margin="0,0"
+                                                     VerticalAlignment="Center"
+                                                     Title="{Binding Name}"
+                                                     Subtitle="{Binding Artist}" />
+                                <TextBlock Text="{Binding Time,StringFormat=m\\:ss}"
+                                           Opacity="0.7" />
+
+                            </StackPanel>
+                        </DockPanel>
+                    </Grid>
+
+                </Border>
+            </Button>
+        </DataTemplate>
     </Application.Resources>
 </Application>

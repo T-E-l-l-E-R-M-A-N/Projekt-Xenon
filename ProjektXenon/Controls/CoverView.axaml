@@ -32,7 +32,7 @@
                             Width="150"
                             Height="150">
                         <Border.Background>
-                            <ImageBrush asyncImageLoader:ImageBrushLoader.Source="https://i.pinimg.com/originals/f1/c4/93/f1c493e61ac0090611af9160abc0d2aa.jpg"
+                            <ImageBrush asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-white-grey-background-geometric-pattern_947276-518.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
                                         Stretch="UniformToFill"
                                         Opacity="0.4"></ImageBrush>
                         </Border.Background>
@@ -43,7 +43,7 @@
                                     Height="48"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Bottom"
-                                    Background="DarkGray"
+                                    Background="#20FFFFFF"
                                     Margin="8">
                                 <Grid>
                                     <avalonia:Icon FontSize="28"
@@ -65,7 +65,7 @@
                             Width="270"
                             Height="270">
                         <Border.Background>
-                            <ImageBrush asyncImageLoader:ImageBrushLoader.Source="https://i.pinimg.com/originals/f1/c4/93/f1c493e61ac0090611af9160abc0d2aa.jpg"
+                            <ImageBrush asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-white-grey-background-geometric-pattern_947276-518.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
                                         Stretch="UniformToFill"
                                         Opacity="0.4"></ImageBrush>
                         </Border.Background>
@@ -75,7 +75,7 @@
                                     Height="48"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Bottom"
-                                    Background="LightGray"
+                                    Background="#20FFFFFF"
                                     Margin="8">
                                 <Grid>
                                     <avalonia:Icon FontSize="28"

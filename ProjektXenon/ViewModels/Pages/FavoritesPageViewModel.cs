@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using ListRandomizer;
+using ProjektXenon.Services;
 
 namespace ProjektXenon.ViewModels;
+
 
 public partial class FavoritesPageViewModel : ViewModelBase, IPage
 {
@@ -16,22 +18,28 @@ public partial class FavoritesPageViewModel : ViewModelBase, IPage
 
     private readonly TrackRepositoryService _trackRepository;
     private readonly MediaPlaybackService _playbackService;
+    private readonly NavigationService _navigationService;
 
     #endregion
 
     #region Observable Fields
 
     [ObservableProperty] private ObservableCollection<Models.MediaItem>? _favorites;
+
+    [ObservableProperty] private IViewStyle _view;
+    [ObservableProperty] private ObservableCollection<IViewStyle> _views;
+    [ObservableProperty] private bool _isAvailable;
     //[ObservableProperty] private ObservableCollection<PlaylistItem>? _savedPlaylists;
 
     #endregion
 
     #region Constructor
 
-    public FavoritesPageViewModel(TrackRepositoryService trackRepository, MediaPlaybackService playbackService)
+    public FavoritesPageViewModel(TrackRepositoryService trackRepository, MediaPlaybackService playbackService, NavigationService navigationService)
     {
         _trackRepository = trackRepository;
         _playbackService = playbackService;
+        _navigationService = navigationService;
     }
 
     #endregion
@@ -40,11 +48,26 @@ public partial class FavoritesPageViewModel : ViewModelBase, IPage
 
     public async Task Init()
     {
+        Views = new ObservableCollection<IViewStyle>()
+        {
+            new TileViewStyle(),
+            new ListViewStyle(),
+            new TableViewStyle(),
+            new CarouselViewStyle()
+        };
+        View = Views[0];
+        
         _trackRepository.FavoritesChanged += TrackRepositoryOnFavoritesChanged;
         var favorites = await _trackRepository.GetFavoritesAsync();
         if (favorites != null)
         {
             Favorites = new ObservableCollection<Models.MediaItem>(favorites);
+            IsAvailable = true;
+        }
+        else
+        {
+            IsAvailable = false;
+            _navigationService.NavigateToExplore();
         }
     }
 
@@ -96,13 +119,36 @@ public partial class FavoritesPageViewModel : ViewModelBase, IPage
         await _playbackService.OpenPlayAsync(playlist.Media[0]);
     }
 
+    [RelayCommand]
+    private void SetView(IViewStyle? view)
+    {
+        if(view == null)
+        {
+            var index = Views.IndexOf(View);
+            if (index < 3)
+            {
+                index++;
+            }
+            else
+            {
+                index = 0;
+            }
+
+            View = Views[index];
+        }
+        else
+        {
+            View = view;
+        }
+    }
+
     #endregion
 
     #region Events Handlers
 
-    private void TrackRepositoryOnFavoritesChanged(object? sender, EventArgs e)
+    private async void TrackRepositoryOnFavoritesChanged(object? sender, EventArgs e)
     {
-        Init();
+        await Init();
     }
 
     #endregion

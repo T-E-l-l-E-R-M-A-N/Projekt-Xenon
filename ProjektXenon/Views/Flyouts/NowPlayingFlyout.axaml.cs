@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using ProjektXenon.Helpers;
+using ProjektXenon.Services;
 using ProjektXenon.ViewModels;
 
 namespace ProjektXenon.Views;

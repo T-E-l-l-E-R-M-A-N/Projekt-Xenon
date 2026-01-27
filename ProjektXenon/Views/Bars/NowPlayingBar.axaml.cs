@@ -2,6 +2,8 @@ using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using ProjektXenon.Helpers;
+using ProjektXenon.Services;
 using ProjektXenon.ViewModels;
 
 namespace ProjektXenon.Views;
@@ -36,15 +38,32 @@ public partial class NowPlayingBar : UserControl
 
     private void LayoutHelperOnLayoutChanged(object? sender, bool e)
     {
+        return;
+    }
+
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
         if (_layoutHelper.IsMobileLayout)
         {
             MobileLayout.IsVisible = true;
             DesktopLayout.IsVisible = false;
+            DesktopCompactLayout.IsVisible = false;
         }
         else
         {
-            MobileLayout.IsVisible = false;
-            DesktopLayout.IsVisible = true;
+            if (e.NewSize.Width < 880)
+            {
+                MobileLayout.IsVisible = false;
+                DesktopLayout.IsVisible = false;
+                DesktopCompactLayout.IsVisible = true;
+            }
+            else
+            {
+                MobileLayout.IsVisible = false;
+                DesktopLayout.IsVisible = true;
+                DesktopCompactLayout.IsVisible = false;
+            }
         }
     }
 }

@@ -13,27 +13,22 @@
              x:DataType="viewModels:NavMenuFlyoutViewModel">
     <Border Classes="NavMenu"
             ClipToBounds="True"
+            Background="#F3F3F3"
             Classes.IsOpen="{Binding IsOpen}"
-            BorderThickness="0"
-            BorderBrush="LightGray">
-        <Border.Background>
-            <ImageBrush
-                asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-white-grey-background-geometric-pattern_947276-518.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
-                Stretch="UniformToFill"
-                Opacity="0.2">
-            </ImageBrush>
-        </Border.Background>
+            BorderThickness="0,0,0,0"
+            BorderBrush="Transparent">
         <Border.Transitions>
             <Transitions>
                 <DoubleTransition Easing="CubicEaseOut" Property="Width" Duration="0:0:0.5" />
             </Transitions>
         </Border.Transitions>
-        <ItemsControl ItemsSource="{Binding Pages}">
+        <ItemsControl ItemsSource="{Binding Pages}"
+                      Margin="0,100,90,0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Classes="NavMenuItemButton" Command="{Binding $parent[ItemsControl].((viewModels:NavMenuFlyoutViewModel)DataContext).NavigateCommand}"
                             CommandParameter="{Binding .}"
-                            
+                            IsEnabled="{Binding IsAvailable}"
                             Content="{Binding Name}" >
                         <Classes.IsSelected>
                             <MultiBinding Converter="{valueConverters:NavMenuActiveItemConverter}">

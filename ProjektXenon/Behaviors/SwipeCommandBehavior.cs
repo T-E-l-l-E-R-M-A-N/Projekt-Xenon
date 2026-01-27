@@ -9,7 +9,7 @@ using ProjektXenon.Controls;
 
 namespace ProjektXenon.Behaviors;
 
-public sealed class SwipeCommandBehavior : Behavior<PanoramaCarousel>
+public sealed class SwipeCommandBehavior : Behavior<Control>
 {
     // Команды
     public static readonly StyledProperty<ICommand?> SwipeLeftCommandProperty =
@@ -71,9 +71,12 @@ public sealed class SwipeCommandBehavior : Behavior<PanoramaCarousel>
         set => SetValue(TargetProperty, value);
     }
 
+    public event EventHandler? SwipeBack;
+    public event EventHandler? SwipeForward;
+
     private bool _pressed;
     private bool _swipeHandled;
-    private Pointer? _pointer;
+    private IPointer? _pointer;
     private Point _start;
     private Point _last;
 
@@ -114,7 +117,7 @@ public sealed class SwipeCommandBehavior : Behavior<PanoramaCarousel>
 
         _pressed = true;
         _swipeHandled = false;
-        //_pointer = e.Pointer;
+        _pointer = e.Pointer;
 
         _start = p.Position;
         _last = _start;
@@ -189,6 +192,15 @@ public sealed class SwipeCommandBehavior : Behavior<PanoramaCarousel>
         var cmd = direction == SwipeDirection.Left ? SwipeLeftCommand : SwipeRightCommand;
         if (cmd is not null && cmd.CanExecute(args))
             cmd.Execute(args);
+
+        if (direction == SwipeDirection.Left)
+        {
+            SwipeBack?.Invoke(this, EventArgs.Empty);
+        }
+        else if (direction == SwipeDirection.Right)
+        {
+            SwipeForward?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void TryChangeSelectedIndex(SwipeDirection direction)

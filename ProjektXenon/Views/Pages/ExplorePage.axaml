@@ -7,181 +7,229 @@
              xmlns:controls="clr-namespace:ProjektXenon.Controls"
              xmlns:behaviors="clr-namespace:ProjektXenon.Behaviors"
              xmlns:views="clr-namespace:ProjektXenon.Views"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="600"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.ValueConverters"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600"
              x:Class="ProjektXenon.Views.ExplorePage"
              x:DataType="viewModels:ExplorePageViewModel">
-    <Grid>
-        <Grid x:Name="DesktopLayout" IsVisible="False">
-            <DockPanel LastChildFill="True">
-                <Border VerticalAlignment="Top"
-                        DockPanel.Dock="Top"
-                        Height="50">
-                    <Border.Background>
-                        <ImageBrush
-                            asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-pink-background_67845-947.jpg?semt=ais_hybrid&amp;w=740"
-                            Stretch="UniformToFill"
-                            Opacity="0.0">
-                        </ImageBrush>
-                    </Border.Background>
-                    <StackPanel Orientation="Horizontal"
-                                VerticalAlignment="Center"
-                                Margin="10,0"
-                                Spacing="8">
-                        <Button Classes="ContextActionButton"
-                                Command="{Binding PlayAllCommand}">
-                            <TextBlock Classes="ButtonCaption"
-                                       Text="Воспроизвести" />
-                        </Button>
-                        <Button Classes="ContextActionButton"
+    <UserControl.Styles>
+        <Style Selector="TabItem">
+            <Setter Property="Width" Value="NaN" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="40" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="Padding" Value="0,0,0,0" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter VerticalAlignment="Bottom" Margin="{TemplateBinding Padding}"
+                                          Content="{TemplateBinding Header}" TextElement.FontWeight="Thin" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
 
-                                Command="{Binding ShuffleCommand}">
-                            <TextBlock Classes="ButtonCaption"
-                                       Text="Случайный выбор" />
-                        </Button>
-                        <Grid></Grid>
-                    </StackPanel>
-                </Border>
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="Pink" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Foreground" Value="DeepPink" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:selected">
+                <Setter Property="Foreground" Value="DeepPink" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="LightGray" />
+            </Style>
+        </Style>
 
-                <ScrollViewer>
-                    <StackPanel>
-                        <ScrollViewer DockPanel.Dock="Top"
+        <Style Selector="controls|ProgressRing">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="Height" Value="60" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="MinWidth" Value="20" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Canvas Name="PART_Canvas"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="controls|HubControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid RowDefinitions="Auto,Auto,*">
+
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0"
+                                   Text="{TemplateBinding Title}"
+                                   FontSize="44"
+                                   FontWeight="Light"
+                                   Margin="24,18,24,10" />
+
+                        <!-- Headers -->
+                        <ScrollViewer Grid.Row="1"
+                                      HorizontalScrollBarVisibility="Hidden"
                                       VerticalScrollBarVisibility="Disabled"
-                                      HorizontalScrollBarVisibility="Auto"
-                                      Height="270">
-                            <StackPanel Grid.Row="0"
-
-                                        Margin="20,0,0,0">
-                                <Border Height="48">
-                                    <Button Classes="TabBarItemButton"
-                                            Classes.tabIsActive="false"
-                                            VerticalAlignment="Bottom"
-                                            Content="НРАВИТСЯ">
-                                    </Button>
-                                </Border>
-                                <ItemsControl ItemsSource="{Binding Favorites}"
-                                              Margin="0,8"
-                                              ItemTemplate="{DynamicResource TrackListTileItemTemplate}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal"
-                                                        Spacing="8" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ScrollViewer>
-                        <StackPanel Grid.Row="1"
-                                    Margin="20,0,0,0">
-                            <Border Height="48">
-                                <Button Classes="TabBarItemButton"
-                                        Classes.tabIsActive="true"
-                                        Content="ПОПУЛЯРНОЕ"
-                                        VerticalAlignment="Bottom">
-                                </Button>
-                            </Border>
-                            <ItemsControl ItemsSource="{Binding Tracks}"
-                                          Margin="0,8"
-                                          ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
+                                      Margin="24,0,24,10">
+                            <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
+                                          ItemTemplate="{TemplateBinding HeaderTemplate}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
+                                        <StackPanel Orientation="Horizontal" Spacing="18" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
-                        </StackPanel>
+                        </ScrollViewer>
 
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
+                        <!-- Content (horizontal ribbon) -->
+                        <ScrollViewer x:Name="PART_ScrollViewer"
+                                      Grid.Row="2"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Disabled"
+                                      Margin="0,0,0,0">
+                            <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
+                                          ItemTemplate="{TemplateBinding ItemTemplate}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" Spacing="24" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    <Grid>
+        <Grid x:Name="DesktopLayout"
+              Background="#F3F3F3">
+            <TabControl Margin="0,0,0,0" Padding="0"
+                        
+                        x:Name="DesktopTabControl">
+                <TabControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="40"
+                                                Margin="56,0,20,0"/>
+                    </ItemsPanelTemplate>
+                </TabControl.ItemsPanel>
+                <TabItem Header="Нравится"
+                         IsVisible="{Binding Favorites, Converter={valueConverters:HasItemsConverter}}">
+                    <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                  HorizontalScrollBarVisibility="Visible">
+                        <Interaction.Behaviors>
+                            <behaviors:HorizontalWheelScrollBehavior />
+                        </Interaction.Behaviors>
+                        <ItemsControl ItemsSource="{Binding Favorites}"
+                                      Margin="56,50,100,0"
+                                      x:Name="FeaturedList"
+                                      HorizontalAlignment="Left"
+                                      ItemTemplate="{DynamicResource TrackListTileItemTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Vertical"
+                                               ItemSpacing="12"
+                                               LineSpacing="12" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Подборка" IsSelected="True">
+                    <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                  HorizontalScrollBarVisibility="Visible">
+                        <Interaction.Behaviors>
+                            <behaviors:HorizontalWheelScrollBehavior />
+                        </Interaction.Behaviors>
+                        <ItemsControl ItemsSource="{Binding Tracks}"
+                                      Margin="56,50,100,0"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Left"
+                                      Padding="0"
+                                      ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Vertical"
+                                               LineSpacing="30"
+                                               ItemSpacing="0" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+
         </Grid>
         <Grid x:Name="MobileLayout">
-            <DockPanel LastChildFill="True">
-                <Border VerticalAlignment="Top"
-                        DockPanel.Dock="Bottom"
-                        Height="50">
-                    <Border.Background>
-                        <ImageBrush
-                            asyncImageLoader:ImageBrushLoader.Source="https://img.freepik.com/premium-vector/abstract-pink-background_67845-947.jpg?semt=ais_hybrid&amp;w=740"
-                            Stretch="UniformToFill"
-                            Opacity="0.0">
-                        </ImageBrush>
-                    </Border.Background>
-                    <StackPanel Orientation="Horizontal"
-                                VerticalAlignment="Center"
-                                Margin="10,0"
-                                Spacing="8">
-                        <Button Classes="ContextActionButton"
-                                Command="{Binding PlayAllCommand}">
-                            <TextBlock Classes="ButtonCaption"
-                                       Text="Воспроизвести" />
-                        </Button>
-                        <Button Classes="ContextActionButton"
+            <StackPanel Orientation="Horizontal" Spacing="50" Margin="54,0,0,0">
+                <DockPanel MinWidth="300" LastChildFill="True"
+                           IsVisible="{Binding Favorites, Converter={valueConverters:HasItemsConverter}}">
+                    <TextBlock Text="Нравится" DockPanel.Dock="Top"
+                               Margin="0,10,0,20"
+                               FontSize="40"
+                               Foreground="DeepPink"
+                               FontWeight="Thin" />
+                    <ItemsControl ItemsSource="{Binding Favorites}"
+                                  Margin="0,8"
+                                  ItemTemplate="{DynamicResource TrackListTileItemTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical"
+                                           ItemsAlignment="Start"
+                                           ItemSpacing="5"
+                                           LineSpacing="5" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </DockPanel>
+                <DockPanel MinWidth="300" LastChildFill="True">
+                    <TextBlock Text="Подборка" DockPanel.Dock="Top"
 
-                                Command="{Binding ShuffleCommand}">
-                            <TextBlock Classes="ButtonCaption"
-                                       Text="Случайный выбор" />
-                        </Button>
-                        <Grid></Grid>
-                    </StackPanel>
-                </Border>
-                <controls:PanoramaCarousel SlideDuration="0:0:0.22"
-                                           CenterSelectedItem="False"
-                                           Spacing="20"
-                                           x:Name="MobileHub"
-                                           Margin="10,0">
-                    <Interaction.Behaviors>
-                        <behaviors:SwipeCommandBehavior MinSwipeDistance="50"
-                                                        MaxVerticalDrift="30"
-                                                        AutoChangeSelectedIndex="True" />
-                    </Interaction.Behaviors>
-                    <Border Width="340">
-                        <DockPanel LastChildFill="True">
-                            <Border Height="48" DockPanel.Dock="Top">
-                                <Button Classes="TabBarItemButton"
-                                        Content="НРАВИТСЯ"
-                                        VerticalAlignment="Bottom">
-                                </Button>
-                            </Border>
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                                <ItemsControl ItemsSource="{Binding Favorites}"
-                                              Margin="0,8"
-                                              ItemTemplate="{DynamicResource TrackListTileItemTemplate}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Horizontal"
-                                                       ItemsAlignment="Start"
-                                                       ItemSpacing="8"
-                                                       LineSpacing="8" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </DockPanel>
-                    </Border>
-                    <Border Width="270">
-                        <DockPanel LastChildFill="True">
-                            <Border Height="48" DockPanel.Dock="Top">
-                                <Button Classes="TabBarItemButton"
-                                        Classes.tabIsActive="true"
-                                        Content="ПОПУЛЯРНОЕ"
-                                        VerticalAlignment="Bottom">
-                                </Button>
-                            </Border>
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                                <ItemsControl ItemsSource="{Binding Tracks}"
-                                              Margin="0,8"
-                                              ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </DockPanel>
-                    </Border>
-                </controls:PanoramaCarousel>
-            </DockPanel>
+                               Margin="0,10,0,20"
+                               FontSize="40"
+                               FontWeight="Thin" />
+                    <ItemsControl ItemsSource="{Binding Tracks}"
+                                  Background="Transparent"
+                                  HorizontalAlignment="Left"
+                                  Padding="5"
+                                  ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical"
+                                           LineSpacing="5"
+                                           ItemSpacing="5" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </DockPanel>
+
+            </StackPanel>
         </Grid>
     </Grid>
 

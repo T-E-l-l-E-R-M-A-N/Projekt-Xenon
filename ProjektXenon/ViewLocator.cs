@@ -23,7 +23,14 @@ public class ViewLocator : IDataTemplate
 
         if (type != null)
         {
-            return (Control)Activator.CreateInstance(type)!;
+            try
+            {
+                return (Control)Activator.CreateInstance(type)!;
+            }
+            catch (Exception e)
+            {
+                return new TextBlock { Text = "Not Found: " + name };
+            }
         }
 
         return new TextBlock { Text = "Not Found: " + name };
@@ -31,6 +38,6 @@ public class ViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is ViewModelBase;
+        return data is ViewModelBase & data is not ICollectionItem;
     }
 }

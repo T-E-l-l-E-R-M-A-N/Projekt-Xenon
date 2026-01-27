@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Net.Http;
+using Microsoft.Maui.Storage;
+using ProjektXenon.Services;
 
 namespace ProjektXenon.ViewModels;
 
@@ -8,6 +10,7 @@ public partial class MainViewModel : ViewModelBase
     #region Private Fields
 
     private readonly MediaPlaybackService _mediaPlaybackService;
+    private readonly NavigationService _navigationService;
     #endregion
 
     #region Observable Fields
@@ -18,22 +21,25 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private NavMenuFlyoutViewModel? _navMenu;
     [ObservableProperty] private PlaylistFlyoutViewModel? _playlistView;
     [ObservableProperty] private NowPlayingFlyoutViewModel? _nowPlayingFlyout;
+    [ObservableProperty] private CommandBarViewModel? _commandBar;
 
     #endregion
 
     #region Constructor
 
-    public MainViewModel(MediaPlaybackService mediaPlaybackService)
+    public MainViewModel(MediaPlaybackService mediaPlaybackService, NavigationService navigationService)
     {
         _mediaPlaybackService = mediaPlaybackService;
+        _navigationService = navigationService;
     }
 
     #endregion
 
-    #region Puiblic Methods
+    #region Public Methods
 
     public void Init()
     {
+        _navigationService.Navigated += NavigationServiceOnNavigated;
         _mediaPlaybackService.Init();
         
         AppBar = IoC.Resolve<AppBarViewModel>();
@@ -44,8 +50,10 @@ public partial class MainViewModel : ViewModelBase
         PlaylistView = IoC.Resolve<PlaylistFlyoutViewModel>();
         NowPlayingFlyout = IoC.Resolve<NowPlayingFlyoutViewModel>();
         NowPlayingFlyout.Init();
+        CommandBar = IoC.Resolve<CommandBarViewModel>();
+        CommandBar.Init();
 
-        CurrentPage = NavMenu.Pages.OfType<ExplorePageViewModel>().FirstOrDefault();
+        _navigationService.NavigateToExplore();
 
         (CurrentPage as ExplorePageViewModel).Init();
 
@@ -53,42 +61,48 @@ public partial class MainViewModel : ViewModelBase
         NavMenu.Pages.OfType<NowPlayingPageViewModel>().FirstOrDefault().Init();
     }
 
+    
+
     #endregion
     
     #region Commands Methods
 
+    private bool CanReturn() => CurrentPage is not ExplorePageViewModel;
+    [RelayCommand(CanExecute = "CanReturn")]
+    private void Return()
+    {
+        _navigationService.NavigateToExplore();
+    }
+
     [RelayCommand]
     private async Task SearchAsync(string text)
     {
-        if (string.IsNullOrEmpty(text)) 
-        {
-            CurrentPage = NavMenu.Pages.OfType<ExplorePageViewModel>().FirstOrDefault();
-            return;
-        }
-        
         var search = NavMenu.Pages.OfType<SearchPageViewModel>().FirstOrDefault();
-        search.SearchText = text;
-        await search.SearchCommand.ExecuteAsync(null);
-        CurrentPage = search;
+        if (!string.IsNullOrEmpty(text))
+        {
+            search.SearchText = text;
+            await search.SearchCommand.ExecuteAsync(null);
+        }
+        _navigationService.NavigateToSearch();
     }
 
     [RelayCommand]
     private async Task PlayMedia(MediaItem media)
     {
-        var path = Environment.CurrentDirectory + $"/media/{media.Id}.mp3";
+        var path = App.AppDataPath + $"/{media.Id}.mp3";
         if (media.Url.StartsWith("https://") & !File.Exists(path))
         {
             using var hc = new HttpClient();
             var buffer = await hc.GetByteArrayAsync(media.Url);
             await File.WriteAllBytesAsync(path, buffer);
             media.Url = path;
-            await _mediaPlaybackService.OpenPlayAsync(media);
+            await _mediaPlaybackService.OpenPlayAsync(new [] {media});
             
         }
         else
         {
             media.Url = path;
-            await _mediaPlaybackService.OpenPlayAsync(media);
+            await _mediaPlaybackService.OpenPlayAsync(new [] {media});
         }
     }
 
@@ -96,7 +110,11 @@ public partial class MainViewModel : ViewModelBase
 
     #region Events Handlers
 
-    
+    private void NavigationServiceOnNavigated(object? sender, IPage e)
+    {
+        CurrentPage = e;
+        ReturnCommand?.NotifyCanExecuteChanged();
+    }
 
     #endregion
 

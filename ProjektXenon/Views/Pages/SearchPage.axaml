@@ -4,6 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:ProjektXenon.ViewModels"
              xmlns:views="clr-namespace:ProjektXenon.Views"
+             xmlns:controls="clr-namespace:ProjektXenon.Controls"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.ValueConverters"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:models="clr-namespace:ProjektXenon.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ProjektXenon.Views.SearchPage"
              x:DataType="viewModels:SearchPageViewModel">
@@ -18,23 +22,11 @@
                 <TextBox.KeyBindings>
                     <KeyBinding Gesture="Return"
                                 Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).SearchCommand}"
-                                CommandParameter="{Binding #SearchBox.Text, UpdateSourceTrigger=PropertyChanged}"/>
+                                CommandParameter="{Binding #SearchBox.Text, UpdateSourceTrigger=PropertyChanged}" />
                 </TextBox.KeyBindings>
             </TextBox>
-            <Border Height="48">
-                <Button Classes="TabBarItemButton"
-                        Classes.tabIsActive="true"
-                        Content="В РЕЗУЛЬТАТАХ">
-                </Button>
-            </Border>
             <ItemsControl ItemsSource="{Binding Tracks}"
-                          Margin="0,8"
-                          ItemTemplate="{DynamicResource TrackListRowItemTemplate}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+                          Margin="0,30,0,0" ItemTemplate="{DynamicResource TrackListRowDetailItemTemplate}">
             </ItemsControl>
         </StackPanel>
     </ScrollViewer>

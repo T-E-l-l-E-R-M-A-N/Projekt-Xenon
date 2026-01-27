@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using ProjektXenon.Services;
 
 namespace ProjektXenon.ViewModels;
 
@@ -6,7 +7,7 @@ public partial class NavMenuFlyoutViewModel : ViewModelBase
 {
     #region Private Fields
 
-    private readonly MainViewModel _mainViewModel;
+    private readonly NavigationService _navigationService;
 
     #endregion
     
@@ -19,9 +20,9 @@ public partial class NavMenuFlyoutViewModel : ViewModelBase
 
     #region Constructor
 
-    public NavMenuFlyoutViewModel(MainViewModel mainViewModel)
+    public NavMenuFlyoutViewModel(NavigationService navigationService)
     {
-        _mainViewModel = mainViewModel;
+        _navigationService = navigationService;
     }
 
     #endregion
@@ -46,7 +47,7 @@ public partial class NavMenuFlyoutViewModel : ViewModelBase
     [RelayCommand]
     private void Navigate(IPage p)
     {
-        _mainViewModel.CurrentPage = p;
+        _navigationService.Navigate(p);
         CloseFlyout();
     }
 

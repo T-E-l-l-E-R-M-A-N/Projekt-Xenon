@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using ProjektXenon.Helpers;
+using ProjektXenon.Services;
 using ProjektXenon.ViewModels;
 
 namespace ProjektXenon.Views;

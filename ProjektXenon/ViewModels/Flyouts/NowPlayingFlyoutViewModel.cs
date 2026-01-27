@@ -1,3 +1,5 @@
+using ProjektXenon.Services;
+
 namespace ProjektXenon.ViewModels;
 
 public partial class NowPlayingFlyoutViewModel : ViewModelBase

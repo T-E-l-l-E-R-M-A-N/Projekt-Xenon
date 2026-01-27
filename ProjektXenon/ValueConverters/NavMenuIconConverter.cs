@@ -20,7 +20,7 @@ public class NavMenuIconConverter : MarkupExtension, IValueConverter
                 PageType.Favorites => "mdi heart",
                 PageType.NowPlaying => "mdi equalizer",
             };
-        
+
         return "mdi view-grid";
     }
 
@@ -30,36 +30,26 @@ public class NavMenuIconConverter : MarkupExtension, IValueConverter
     }
 }
 
-
-public class CurrentMediaIdIsEqualToMediaItemConverter : MarkupExtension, IMultiValueConverter
+public class ViewStyleIconConverter : MarkupExtension, IValueConverter
 {
     public override object ProvideValue(IServiceProvider serviceProvider) => this;
 
-
-    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values[0] is MediaItem item1 && values[1] is MediaItem item2)
-        {
-            if (item1.Id == item2.Id)
-                return true;
-        }
+        if (value is IViewStyle view)
+            return view.Name switch
+            {
+                "Tiles" => "mdi view-grid",
+                "List" => "mdi format-list-text",
+                "Table" => "mdi table-of-contents",
+                "Carousel" => "mdi view-carousel",
+            };
 
-        return false;
+        return "mdi view-grid";
     }
-}
-public class NavMenuActiveItemConverter : MarkupExtension, IMultiValueConverter
-{
-    public override object ProvideValue(IServiceProvider serviceProvider) => this;
 
-
-    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values[0] is IPage item1 && values[1] is IPage item2)
-        {
-            if (item1.Type == item2.Type)
-                return true;
-        }
-
-        return false;
+        throw new NotImplementedException();
     }
 }

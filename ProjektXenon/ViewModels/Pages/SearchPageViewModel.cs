@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using ListRandomizer;
+using ProjektXenon.Services;
 
 namespace ProjektXenon.ViewModels;
 
@@ -24,6 +25,8 @@ public partial class SearchPageViewModel : ViewModelBase, IPage
     [ObservableProperty] private ObservableCollection<Models.MediaItem>? _tracks;
 
     [ObservableProperty] private string? _searchText;
+    [ObservableProperty] private bool _isAvailable;
+
     //[ObservableProperty] private ObservableCollection<PlaylistItem>? _savedPlaylists;
 
     #endregion
@@ -34,6 +37,7 @@ public partial class SearchPageViewModel : ViewModelBase, IPage
     {
         _trackRepository = trackRepository;
         _playbackService = playbackService;
+        IsAvailable = true;
     }
 
     #endregion

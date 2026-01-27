@@ -1,10 +1,12 @@
+using ProjektXenon.Services;
+
 namespace ProjektXenon.ViewModels;
 
 public partial class NowPlayingPageViewModel : ViewModelBase, IPage
 {
     #region Page Base
 
-    public string Name => "Воспроизводится";
+    public string Name => "Сейчас играет";
     public PageType Type => PageType.NowPlaying;
 
     #endregion
@@ -26,6 +28,7 @@ public partial class NowPlayingPageViewModel : ViewModelBase, IPage
     [ObservableProperty] private double _position;
     [ObservableProperty] private string? _totalTimeString;
     [ObservableProperty] private bool _playlistIsOpen;
+    [ObservableProperty] private bool _isAvailable;
 
     #endregion
 
@@ -176,6 +179,16 @@ public partial class NowPlayingPageViewModel : ViewModelBase, IPage
     private void PlaybackServiceOnMediaChanged(object? sender, Models.MediaItem e)
     {
         CurrentMedia = e;
+        if (CurrentMedia != null)
+        {
+            IsAvailable = true;
+        }
+        else
+        {
+            IsAvailable = false;
+            var navMenu = IoC.Resolve<NavMenuFlyoutViewModel>();
+            navMenu.NavigateCommand.Execute(navMenu.Pages.OfType<ExplorePageViewModel>().FirstOrDefault());
+        }
         if (_playbackService.Playlist != null) 
             PlaylistItem = _playbackService.Playlist;
     }

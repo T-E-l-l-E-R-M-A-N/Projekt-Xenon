@@ -1,3 +1,5 @@
+using ProjektXenon.Services;
+
 namespace ProjektXenon.ViewModels;
 
 public partial class NowPlayingBarViewModel : ViewModelBase
@@ -6,14 +8,14 @@ public partial class NowPlayingBarViewModel : ViewModelBase
 
     private readonly MediaPlaybackService _playbackService;
     private readonly TrackRepositoryService _trackRepository;
-    private readonly PlaylistFlyoutViewModel _playlistFlyout;
-    private readonly NowPlayingFlyoutViewModel _nowPlayingFlyout;
+    private readonly NavigationService _navigationService;
 
     #endregion
 
     #region Observable Fields
 
     [ObservableProperty] private ICollectionItem? _currentMedia;
+    [ObservableProperty] private PlaylistItem? _playlistItem;
     [ObservableProperty] private TimeSpan? _currentTime;
     [ObservableProperty] private bool _isPlaying;
     [ObservableProperty] private double _totalTime;
@@ -23,12 +25,12 @@ public partial class NowPlayingBarViewModel : ViewModelBase
 
     #region Constructor
 
-    public NowPlayingBarViewModel(MediaPlaybackService playbackService, TrackRepositoryService trackRepository, PlaylistFlyoutViewModel playlistFlyout, NowPlayingFlyoutViewModel nowPlayingFlyout)
+    public NowPlayingBarViewModel(MediaPlaybackService playbackService, TrackRepositoryService trackRepository,
+        NavigationService navigationService)
     {
         _playbackService = playbackService;
         _trackRepository = trackRepository;
-        _playlistFlyout = playlistFlyout;
-        _nowPlayingFlyout = nowPlayingFlyout;
+        _navigationService = navigationService;
     }
 
     #endregion
@@ -38,13 +40,7 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     [RelayCommand]
     private void ToggleNowPlayingView()
     {
-        var navMenu = IoC.Resolve<NavMenuFlyoutViewModel>();
-        navMenu.NavigateCommand.Execute(navMenu.Pages.OfType<NowPlayingPageViewModel>().FirstOrDefault());
-    }
-    [RelayCommand]
-    private void TogglePlaylistView()
-    {
-        _playlistFlyout.IsOpen = !_playlistFlyout.IsOpen;
+        _navigationService.NavigateToNowPlaying();
     }
 
     private bool CanTogglePause() => CurrentMedia != null;
@@ -53,9 +49,10 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     private void TogglePause()
     {
         _playbackService.Pause();
-        
+
         TogglePauseCommand.NotifyCanExecuteChanged();
     }
+
     private bool CanSkipNext()
     {
         if (_playbackService.Playlist != null)
@@ -90,7 +87,7 @@ public partial class NowPlayingBarViewModel : ViewModelBase
             }
         }
     }
-    
+
     private bool CanSkipPrevious()
     {
         if (_playbackService.Playlist != null)
@@ -130,7 +127,7 @@ public partial class NowPlayingBarViewModel : ViewModelBase
         {
             list.AddRange(favs);
         }
-        
+
         if ((CurrentMedia as Models.MediaItem).IsFavorite)
         {
             if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) == null)
@@ -146,8 +143,15 @@ public partial class NowPlayingBarViewModel : ViewModelBase
             }
         }
 
-        
+
         await _trackRepository.ChangeFavoritesAsync(list);
+    }
+
+    [RelayCommand]
+    private void Seek(object value)
+    {
+        if (value is double d)
+            _playbackService.SeekTo(d);
     }
 
     #endregion
@@ -169,20 +173,22 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     private void PlaybackServiceOnMediaChanged(object? sender, Models.MediaItem e)
     {
         CurrentMedia = e;
+        if (_playbackService.Playlist != null)
+            PlaylistItem = _playbackService.Playlist;
     }
-    
+
     private void PlaybackServiceOnStateChanged(object? sender, bool e)
     {
         IsPlaying = e;
         SkipPreviousCommand.NotifyCanExecuteChanged();
         SkipNextCommand.NotifyCanExecuteChanged();
-        togglePauseCommand.NotifyCanExecuteChanged();
+        TogglePauseCommand.NotifyCanExecuteChanged();
 
         if (_playbackService.Playlist != null)
             foreach (var item in _playbackService.Playlist.Media)
             {
                 (item as Models.MediaItem).IsPlaying = false;
-                if (item.Id == CurrentMedia.Id)
+                if (CurrentMedia != null && item.Id == CurrentMedia.Id)
                 {
                     (item as Models.MediaItem).IsPlaying = true;
                 }
@@ -193,7 +199,8 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     {
         CurrentTime = e;
         Position = CurrentTime.Value.TotalSeconds;
-        TotalTime = (CurrentMedia as Models.MediaItem).Time.Value.TotalSeconds;
+        if((CurrentMedia as Models.MediaItem) is { } item)
+            TotalTime = item.Time.Value.TotalSeconds;
     }
 
     #endregion

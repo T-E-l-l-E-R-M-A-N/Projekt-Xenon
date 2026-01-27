@@ -27,52 +27,7 @@
             <Setter Property="Opacity" Value="0.5"/>
         </Style>
         
-        <Style Selector="Slider /template/ Thumb">
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Grid Width="20"
-                          Height="20">
-                        <Border Height="20"
-                                Width="20"
-                                CornerRadius="10"
-                                BorderThickness="2"
-                                BorderBrush="DeepPink"
-                                Background="White" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="Slider[IsPointerOver=True]:pointerover /template/ Thumb">
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Grid Width="5"
-                          Height="20">
-                        <Border Height="20"
-                                Width="20"
-                                CornerRadius="10"
-                                BorderThickness="2"
-                                BorderBrush="DeepPink"
-                                Background="{Binding $parent[views:NowPlayingFlyout].Foreground}" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="Slider /template/ RepeatButton#PART_IncreaseButton">
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Height="2"
-                            Background="LightGray" />
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="Slider /template/ RepeatButton#PART_DecreaseButton">
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Height="2"
-                            Background="Pink" />
-                </ControlTemplate>
-            </Setter>
-        </Style>
+        
     </UserControl.Styles>
     <Grid>
         <Grid x:Name="DesktopLayout" Background="Gray">

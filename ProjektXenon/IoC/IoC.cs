@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using ProjektXenon.Helpers;
+using ProjektXenon.Services;
 using ProjektXenon.ViewModels;
 
 namespace ProjektXenon;
@@ -11,8 +13,9 @@ public static class IoC
     {
         var services = new ServiceCollection();
 
-        services.AddScoped<OsXAudioEngine>();
+        services.AddScoped<UniversalAudioEngine>();
         services.AddScoped<MediaPlaybackService>();
+        services.AddScoped<NavigationService>();
 
         services.AddScoped<TrackRepositoryService>();
 
@@ -21,6 +24,7 @@ public static class IoC
         services.AddScoped<NavMenuFlyoutViewModel>();
         services.AddScoped<PlaylistFlyoutViewModel>();
         services.AddScoped<NowPlayingFlyoutViewModel>();
+        services.AddScoped<CommandBarViewModel>();
 
         services.AddScoped<IPage, ExplorePageViewModel>();
         services.AddScoped<IPage, SearchPageViewModel>();

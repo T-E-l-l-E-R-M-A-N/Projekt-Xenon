@@ -1,8 +1,11 @@
+using System.IO;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Maui.Storage;
 using ProjektXenon.ViewModels;
 using ProjektXenon.Views;
 
@@ -10,10 +13,18 @@ namespace ProjektXenon;
 
 public partial class App : Application
 {
+    public static readonly string AppDataPath =
+        RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
+        RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+            ? Environment.CurrentDirectory + "/media"
+            : FileSystem.AppDataDirectory + "/media";
     public override void Initialize()
     {
         IoC.Build();
         AvaloniaXamlLoader.Load(this);
+
+        if (!Directory.Exists(AppDataPath))
+            Directory.CreateDirectory(AppDataPath);
     }
 
     public override void OnFrameworkInitializationCompleted()
