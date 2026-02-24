@@ -17,6 +17,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private PlaylistFlyoutViewModel? _playlistView;
     [ObservableProperty] private NowPlayingFlyoutViewModel? _nowPlayingFlyout;
     [ObservableProperty] private CommandBarViewModel? _commandBar;
+    [ObservableProperty] private MediaContextMenuFlyoutViewModel? _mediaContextMenuFlyout;
 
     #endregion
 
@@ -47,6 +48,7 @@ public partial class MainViewModel : ViewModelBase
         NowPlayingFlyout.Init();
         CommandBar = IoC.Resolve<CommandBarViewModel>();
         CommandBar.Init();
+        MediaContextMenuFlyout = IoC.Resolve<MediaContextMenuFlyoutViewModel>();
 
         _navigationService.NavigateToExplore();
 

@@ -1,0 +1,145 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             xmlns:views="clr-namespace:ProjektXenon.Desktop.UI.Views"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.Desktop.UI.ValueConverters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjektXenon.Desktop.UI.Views.SearchPage"
+             x:DataType="viewModels:SearchPageViewModel">
+    <DockPanel LastChildFill="True"
+               Margin="0,30,0,0">
+        <Border DockPanel.Dock="Top"
+                Height="30"
+                VerticalAlignment="Top"
+                Padding="30,0"
+                Classes="PageTabsBorder">
+            <TextBox Classes="AppBarSearchBox"
+                     Foreground="Black"
+                     HorizontalAlignment="Center"
+                     Margin="0,10"
+                     Text="{Binding SearchText}"
+                     Watermark="Search by track name..."
+                     x:Name="SearchBox"
+                     DockPanel.Dock="Top">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Return"
+                                Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).SearchCommand}"
+                                CommandParameter="{Binding #SearchBox.Text}" />
+                </TextBox.KeyBindings>
+            </TextBox>
+        </Border>
+        
+        <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                      Margin="0,30,0,0"
+                      HorizontalScrollBarVisibility="Auto">
+            <Interaction.Behaviors>
+                <HorizontalScrollViewerBehavior />
+            </Interaction.Behaviors>
+            <ItemsControl ItemsSource="{Binding Tracks}"
+                          Margin="30, 0,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical"
+                                   ItemSpacing="8"
+                                   LineSpacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                            CommandParameter="{Binding .}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Height="90"
+                                            Width="370"
+                                            Background="#0F0F0F">
+                                        <DockPanel LastChildFill="True">
+                                            <Border Width="140"
+                                                    DockPanel.Dock="Left"
+                                                    Background="Gray"
+                                                    ClipToBounds="True">
+
+                                                <Grid>
+                                                    <avalonia:Icon FontSize="80"
+                                                                   Foreground="DarkGray"
+                                                                   Value="mdi headphones"
+                                                                   VerticalAlignment="Bottom"
+                                                                   Margin="0,0,0,-14" />
+                                                    <Image
+                                                        asyncImageLoader:ImageLoader.Source="{Binding Image}"
+                                                        Width="140"
+                                                        Height="140"
+                                                        VerticalAlignment="Center" />
+                                                    <ProgressBar CornerRadius="0"
+                                                                 Background="Gray"
+                                                                 Foreground="White"
+                                                                 DockPanel.Dock="Bottom"
+                                                                 MinHeight="2"
+                                                                 Height="5"
+                                                                 Width="140"
+                                                                 HorizontalAlignment="Left"
+                                                                 MinWidth="140"
+                                                                 VerticalAlignment="Bottom"
+                                                                 Margin="0,0"
+                                                                 Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                                                 Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                                        <ProgressBar.IsVisible>
+                                                            <MultiBinding
+                                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                <Binding Path="." />
+                                                                <Binding
+                                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                            </MultiBinding>
+                                                        </ProgressBar.IsVisible>
+                                                    </ProgressBar>
+                                                </Grid>
+                                            </Border>
+                                            <StackPanel Margin="14,10">
+                                                <TextBlock FontSize="20"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="White"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                                <TextBlock FontSize="18"
+                                                           FontWeight="Light"
+                                                           Foreground="LightGray"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Text="{Binding Artist}" />
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="12">
+                                                    <TextBlock FontSize="14"
+                                                               FontWeight="Light"
+                                                               Margin="0,10,0,0"
+                                                               Foreground="LightGray"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Text="{Binding Time, StringFormat=m\\:ss}" />
+                                                    <avalonia:Icon FontSize="24"
+                                                                   Foreground="White"
+                                                                   Value="mdi play">
+                                                        <avalonia:Icon.IsVisible>
+                                                            <MultiBinding
+                                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                <Binding Path="." />
+                                                                <Binding
+                                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                            </MultiBinding>
+                                                        </avalonia:Icon.IsVisible>
+                                                    </avalonia:Icon>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

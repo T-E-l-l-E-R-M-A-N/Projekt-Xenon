@@ -1,0 +1,228 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:models="clr-namespace:ProjektXenon.Shared.Models;assembly=ProjektXenon.Shared"
+             xmlns:behaviors="clr-namespace:ProjektXenon.Desktop.UI.Behaviors"
+             xmlns:views="clr-namespace:ProjektXenon.Desktop.UI.Views"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="70"
+             x:Class="ProjektXenon.Desktop.UI.Views.NowPlayingBar"
+             Foreground="White"
+             x:DataType="viewModels:NowPlayingBarViewModel"
+             IsEnabled="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia, Converter={x:Static ObjectConverters.IsNotNull}}">
+    
+    <UserControl.Styles>
+        <Style Selector="views|NowPlayingBar[IsEnabled=False]">
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
+        <Style Selector="Button.TransportControlsButton">
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            
+            <Style Selector="^:pointerover" >
+                <Setter Property="Background" Value="Gray"/>
+            </Style>
+            
+            <Style Selector="^:pressed" >
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="DimGray"/>
+            </Style>
+            
+            <Style Selector="^:disabled" >
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton avalonia|Icon">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton:disabled avalonia|Icon">
+            <Setter Property="Foreground" Value="Gray"/>
+        </Style>
+        
+        <Style Selector="Slider /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Width="20"
+                          Height="20">
+                        <Border Height="5"
+                                Width="10"
+                                HorizontalAlignment="Left"
+                                CornerRadius="0"
+                                BorderThickness="0"
+                                Background="LightGray" />
+                        <Border Height="5"
+                                Width="10"
+                                CornerRadius="0"
+                                HorizontalAlignment="Right"
+                                BorderThickness="0"
+                                Background="Gray" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider[IsPointerOver=True]:pointerover /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Width="20"
+                          Height="20">
+                        <Border Height="15"
+                                Width="5"
+                                HorizontalAlignment="Left"
+                                CornerRadius="0"
+                                BorderThickness="0"
+                                Background="LightGray" />
+                        <Border Height="5"
+                                Width="15"
+                                CornerRadius="0"
+                                HorizontalAlignment="Right"
+                                BorderThickness="0"
+                                Background="Gray" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider /template/ RepeatButton#PART_IncreaseButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Height="20"
+                          Background="Transparent">
+                        <Border Height="5"
+                                Background="Gray" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Slider /template/ RepeatButton#PART_DecreaseButton">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid Height="20"
+                          Background="Transparent">
+                        <Border Height="5"
+                                Background="LightGray" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    <Border Height="70"
+            Background="#0F0F0F">
+        <Grid>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="30,0">
+                <Button Classes="TransportControlsButton"
+                        Command="{Binding SkipPreviousCommand}">
+                    <avalonia:Icon Value="mdi chevron-left"/>
+                </Button>
+                <Button Classes="TransportControlsButton"
+                        Command="{Binding TogglePauseCommand}"
+                        Classes.IsPlaying="{Binding IsPlaying}">
+                    <Button.Styles>
+                        <Style Selector="Button:not(.IsPlaying)">
+                            <Setter Property="Content">
+                                <Template>
+                                    <avalonia:Icon Value="mdi play" />
+                                </Template>
+                            </Setter>
+                        </Style>
+                        <Style Selector="Button.IsPlaying">
+                            <Setter Property="Content">
+                                <Template>
+                                    <avalonia:Icon Value="mdi pause" />
+                                </Template>
+                            </Setter>
+                        </Style>
+                    </Button.Styles>
+                </Button>
+                <Button Classes="TransportControlsButton"
+                        Command="{Binding SkipNextCommand}">
+                    <avalonia:Icon Value="mdi chevron-right"/>
+                </Button>
+            </StackPanel>
+            <Button Command="{Binding ToggleNowPlayingViewCommand}"
+                    Margin="100,0"
+                    HorizontalAlignment="Right">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Width="50"
+                                
+                                
+                                Height="50"
+                                Background="DimGray">
+                            <Grid>
+                                <avalonia:Icon FontSize="30"
+                                               Value="mdi headphones"
+                                               Foreground="Gray" />
+                                <Image
+                                    asyncImageLoader:ImageLoader.Source="{Binding ((models:MediaItem)CurrentMedia).Image}"
+                                />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            
+            <Button Classes="TransportControlsButton"
+                    HorizontalAlignment="Right"
+                    Margin="42,0"
+                    Classes.IsFavorite="{Binding ((models:MediaItem)CurrentMedia).IsFavorite}"
+                    Command="{Binding ToggleFavoriteCommand}">
+                <Button.Styles>
+                    <Style Selector="Button:not(.IsFavorite) avalonia|Icon">
+                        <Setter Property="Foreground"
+                                Value="Gray" />
+                    </Style>
+                    <Style Selector="Button.IsFavorite avalonia|Icon">
+                        <Setter Property="Foreground" Value="White" />
+                    </Style>
+                </Button.Styles>
+                <avalonia:Icon Value="mdi heart" FontSize="16" ClipToBounds="False" />
+            </Button>
+           
+            <Grid>
+                <DockPanel LastChildFill="True"
+                           Margin="200,0">
+                    <TextBlock Width="30"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Text="{Binding CurrentTime, StringFormat=m\\:ss, FallbackValue=0:00}" />
+                    <TextBlock Width="30"
+                               Opacity="0.5"
+                               TextAlignment="Right"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               DockPanel.Dock="Right"
+                               Text="{Binding ((models:MediaItem)CurrentMedia).Time, StringFormat=m\\:ss, FallbackValue=0:00}" />
+                    <Slider Margin="20,0"
+                            VerticalAlignment="Center"
+                            Maximum="{Binding TotalTime}"
+                            Value="{Binding Position}">
+                        <Interaction.Behaviors>
+                            <behaviors:SliderDragCommandBehavior FireOnDrag="False"
+                                                                 FireOnPointerPressed="True"
+                                                                 DragCommand="{Binding SeekCommand}" />
+                        </Interaction.Behaviors>
+                    </Slider>
+                </DockPanel>
+                
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

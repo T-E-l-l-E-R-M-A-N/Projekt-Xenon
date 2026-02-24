@@ -7,6 +7,10 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ProjektXenon.Desktop.UI.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
+        MinWidth="895"
+        MinHeight="835"
+        MaxHeight="1070"
+        MaxWidth="1700"
         Title="ProjektXenon">
-        <TextBlock Text="{Binding .}"/>
+        <views:MainView/>
 </Window>

@@ -20,6 +20,7 @@ public static class IoC
         services.AddScoped<PlaylistFlyoutViewModel>();
         services.AddScoped<NowPlayingFlyoutViewModel>();
         services.AddScoped<CommandBarViewModel>();
+        services.AddScoped<MediaContextMenuFlyoutViewModel>();
 
         services.AddScoped<IPage, ExplorePageViewModel>();
         services.AddScoped<IPage, SearchPageViewModel>();

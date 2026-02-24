@@ -2,6 +2,30 @@ namespace ProjektXenon.Shared.ViewModels;
 
 public partial class NowPlayingBarViewModel : ViewModelBase
 {
+    #region Constructor
+
+    public NowPlayingBarViewModel(MediaPlaybackService playbackService, TrackRepositoryService trackRepository,
+        NavigationService navigationService)
+    {
+        _playbackService = playbackService;
+        _trackRepository = trackRepository;
+        _navigationService = navigationService;
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public void Init()
+    {
+        _playbackService.TimeChanged += PlaybackServiceOnCurrentTimeChanged;
+        //_playbackService.MediaPlayEnded += PlaybackServiceOnMediaPlayEnded;
+        _playbackService.StateChanged += PlaybackServiceOnStateChanged;
+        _playbackService.MediaChanged += PlaybackServiceOnMediaChanged;
+    }
+
+    #endregion
+
     #region Private Fields
 
     private readonly MediaPlaybackService _playbackService;
@@ -21,18 +45,6 @@ public partial class NowPlayingBarViewModel : ViewModelBase
 
     #endregion
 
-    #region Constructor
-
-    public NowPlayingBarViewModel(MediaPlaybackService playbackService, TrackRepositoryService trackRepository,
-        NavigationService navigationService)
-    {
-        _playbackService = playbackService;
-        _trackRepository = trackRepository;
-        _navigationService = navigationService;
-    }
-
-    #endregion
-
     #region Commands Methods
 
     [RelayCommand]
@@ -41,7 +53,10 @@ public partial class NowPlayingBarViewModel : ViewModelBase
         _navigationService.NavigateToNowPlaying();
     }
 
-    private bool CanTogglePause() => CurrentMedia != null;
+    private bool CanTogglePause()
+    {
+        return CurrentMedia != null;
+    }
 
     [RelayCommand(CanExecute = "CanTogglePause")]
     private void TogglePause()
@@ -54,16 +69,11 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     private bool CanSkipNext()
     {
         if (_playbackService.Playlist != null)
-        {
             if (CurrentMedia != null)
             {
-                var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
-                if (index != _playbackService.Playlist.Media.Count - 1)
-                {
-                    return true;
-                }
+                var index = _playbackService.Playlist.Media.IndexOf((MediaItem)CurrentMedia);
+                if (index != _playbackService.Playlist.Media.Count - 1) return true;
             }
-        }
 
         return false;
     }
@@ -72,10 +82,9 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     private void SkipNext()
     {
         if (_playbackService.Playlist != null)
-        {
             if (CurrentMedia != null)
             {
-                var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
+                var index = _playbackService.Playlist.Media.IndexOf((MediaItem)CurrentMedia);
                 if (index != _playbackService.Playlist.Media.Count - 1)
                 {
                     index++;
@@ -83,22 +92,16 @@ public partial class NowPlayingBarViewModel : ViewModelBase
                     _playbackService.OpenPlayAsync(media);
                 }
             }
-        }
     }
 
     private bool CanSkipPrevious()
     {
         if (_playbackService.Playlist != null)
-        {
             if (CurrentMedia != null)
             {
-                var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
-                if (index != 0)
-                {
-                    return true;
-                }
+                var index = _playbackService.Playlist.Media.IndexOf((MediaItem)CurrentMedia);
+                if (index != 0) return true;
             }
-        }
 
         return false;
     }
@@ -106,7 +109,7 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     [RelayCommand(CanExecute = "CanSkipPrevious")]
     private void SkipPrevious()
     {
-        var index = _playbackService.Playlist.Media.IndexOf((Models.MediaItem)CurrentMedia);
+        var index = _playbackService.Playlist.Media.IndexOf((MediaItem)CurrentMedia);
         if (index != 0)
         {
             index--;
@@ -118,27 +121,18 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     [RelayCommand]
     private async Task ToggleFavorite()
     {
-        (CurrentMedia as Models.MediaItem).IsFavorite = !(CurrentMedia as Models.MediaItem).IsFavorite;
+        (CurrentMedia as MediaItem).IsFavorite = !(CurrentMedia as MediaItem).IsFavorite;
         var favs = await _trackRepository.GetFavoritesAsync();
-        List<Models.MediaItem> list = [];
-        if (favs != null)
-        {
-            list.AddRange(favs);
-        }
+        List<MediaItem> list = [];
+        if (favs != null) list.AddRange(favs);
 
-        if ((CurrentMedia as Models.MediaItem).IsFavorite)
+        if ((CurrentMedia as MediaItem).IsFavorite)
         {
-            if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) == null)
-            {
-                list.Add(CurrentMedia as Models.MediaItem);
-            }
+            if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) == null) list.Add(CurrentMedia as MediaItem);
         }
         else
         {
-            if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) is Models.MediaItem media)
-            {
-                list.Remove(media);
-            }
+            if (list.FirstOrDefault(x => x.Id == CurrentMedia.Id) is MediaItem media) list.Remove(media);
         }
 
 
@@ -154,21 +148,9 @@ public partial class NowPlayingBarViewModel : ViewModelBase
 
     #endregion
 
-    #region Public Methods
-
-    public void Init()
-    {
-        _playbackService.TimeChanged += PlaybackServiceOnCurrentTimeChanged;
-        //_playbackService.MediaPlayEnded += PlaybackServiceOnMediaPlayEnded;
-        _playbackService.StateChanged += PlaybackServiceOnStateChanged;
-        _playbackService.MediaChanged += PlaybackServiceOnMediaChanged;
-    }
-
-    #endregion
-
     #region Events Handlers
 
-    private void PlaybackServiceOnMediaChanged(object? sender, Models.MediaItem e)
+    private void PlaybackServiceOnMediaChanged(object? sender, MediaItem e)
     {
         CurrentMedia = e;
         if (_playbackService.Playlist != null)
@@ -185,11 +167,8 @@ public partial class NowPlayingBarViewModel : ViewModelBase
         if (_playbackService.Playlist != null)
             foreach (var item in _playbackService.Playlist.Media)
             {
-                (item as Models.MediaItem).IsPlaying = false;
-                if (CurrentMedia != null && item.Id == CurrentMedia.Id)
-                {
-                    (item as Models.MediaItem).IsPlaying = true;
-                }
+                item.IsPlaying = false;
+                if (CurrentMedia != null && item.Id == CurrentMedia.Id) item.IsPlaying = true;
             }
     }
 
@@ -197,7 +176,7 @@ public partial class NowPlayingBarViewModel : ViewModelBase
     {
         CurrentTime = e;
         Position = CurrentTime.Value.TotalSeconds;
-        if((CurrentMedia as Models.MediaItem) is { } item)
+        if ((CurrentMedia as MediaItem) is { } item)
             TotalTime = item.Time.Value.TotalSeconds;
     }
 

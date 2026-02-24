@@ -1,0 +1,72 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             xmlns:views="clr-namespace:ProjektXenon.Desktop.UI.Views"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.Desktop.UI.ValueConverters"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             Background="#0F0F0F"
+             x:DataType="viewModels:NavMenuFlyoutViewModel"
+             x:Class="ProjektXenon.Desktop.UI.Views.NavMenuFlyout">
+    <DockPanel LastChildFill="True"
+               Margin="0,30">
+        <Border DockPanel.Dock="Top"
+                Height="30"
+                Padding="30,0"
+                Classes="PageTabsBorder">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="12"
+                        VerticalAlignment="Center">
+                <Button Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).AppBar.ToggleNavMenuCommand}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <avalonia:Icon FontSize="24"
+                                           Margin="0,0,10,0"
+                                           Foreground="White"
+                                           Value="mdi menu" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Grid>
+            <ItemsControl ItemsSource="{Binding Pages}"
+                          Margin="0,30">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding $parent[ItemsControl].((viewModels:NavMenuFlyoutViewModel)DataContext).NavigateCommand}"
+                                CommandParameter="{Binding .}"
+                                IsEnabled="{Binding IsAvailable}">
+                            <Style Selector="Button:disabled">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Style>
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Height="48"
+                                            Background="Transparent"
+                                            Padding="30,0">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="18"
+                                                    VerticalAlignment="Center">
+                                            <avalonia:Icon FontSize="24"
+                                                           Margin="0,0,10,0"
+                                                           Foreground="White"
+                                                           Value="{Binding ., Converter={valueConverters:NavMenuIconConverter}}" />
+                                            <TextBlock
+                                                FontSize="18"
+                                                FontWeight="SemiBold"
+                                                Foreground="Gray"
+                                                Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                        </StackPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </DockPanel>
+</UserControl>

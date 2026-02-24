@@ -1,0 +1,178 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:models="clr-namespace:ProjektXenon.Shared.Models;assembly=ProjektXenon.Shared"
+             xmlns:views="clr-namespace:ProjektXenon.Desktop.UI.Views"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.Desktop.UI.ValueConverters"
+             xmlns:ui="clr-namespace:ProjektXenon.Desktop.UI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
+             x:Class="ProjektXenon.Desktop.UI.Views.NowPlayingPage"
+             x:DataType="viewModels:NowPlayingPageViewModel">
+    <Grid RowDefinitions="*, *">
+        <Border>
+            <Grid>
+                <Image
+                    asyncImageLoader:ImageLoader.Source="https://i.pinimg.com/originals/c1/0c/c9/c10cc989d42e1da1f948ec02f435f976.jpg"
+                    Stretch="UniformToFill"
+                    Opacity="0.5">
+                </Image>
+                <TextBlock Margin="30"
+                           FontSize="38"
+                           FontWeight="Light"
+                           Text="список воспроизведения" />
+                <DockPanel LastChildFill="True"
+                       VerticalAlignment="Bottom"
+                       Margin="30">
+                <Border Width="270"
+                        Height="270"
+                        Background="DimGray">
+                    <Grid>
+                        <avalonia:Icon FontSize="120"
+                                       Value="mdi headphones"
+                                       Foreground="Gray" />
+                        <Image
+                            asyncImageLoader:ImageLoader.Source="{Binding ((models:MediaItem)CurrentMedia).Image}"
+                            Width="270"
+                            Height="270"
+                            VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+                <StackPanel VerticalAlignment="Bottom"
+                            Margin="24,0">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="4">
+                        <TextBlock
+                            Text="{Binding CurrentTime, StringFormat=m\\:ss}"
+                            FontSize="14"
+                            Foreground="LightGray"
+                            FontWeight="Light" />
+                        <TextBlock
+                            Text="{Binding ((models:MediaItem)CurrentMedia).Time, StringFormat=m\\:ss}"
+                            FontSize="14"
+                            Foreground="Gray"
+                            FontWeight="Light" />
+                    </StackPanel>
+                    <TextBlock
+                        Text="{Binding ((models:MediaItem)CurrentMedia).Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
+                        TextTrimming="CharacterEllipsis"
+                        FontSize="24"
+                        FontWeight="SemiBold" />
+                    <TextBlock
+                        Text="{Binding ((models:MediaItem)CurrentMedia).Artist}"
+                        TextTrimming="CharacterEllipsis"
+                        FontSize="18"
+                        Foreground="LightGray"
+                        FontWeight="Light" />
+                </StackPanel>
+            </DockPanel>
+            </Grid>
+            
+        </Border>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl Margin="30,30,30,0"
+                          ItemsSource="{Binding PlaylistItem.Media}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,8">
+                            <Button
+                            Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                            CommandParameter="{Binding .}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Height="90"
+                                            Width="{Binding $parent[ItemsControl].Bounds.Width}"
+                                            Background="#0F0F0F">
+                                        <DockPanel LastChildFill="True">
+                                            <Border Width="140"
+                                                    DockPanel.Dock="Left"
+                                                    Background="Gray"
+                                                    ClipToBounds="True">
+
+                                                <Grid>
+                                                    <avalonia:Icon FontSize="80"
+                                                                   Foreground="DarkGray"
+                                                                   Value="mdi headphones"
+                                                                   VerticalAlignment="Bottom"
+                                                                   Margin="0,0,0,-14" />
+                                                    <Image
+                                                        asyncImageLoader:ImageLoader.Source="{Binding Image}"
+                                                        Width="140"
+                                                        Height="140"
+                                                        VerticalAlignment="Center" />
+                                                    
+                                                </Grid>
+                                            </Border>
+                                            
+                                            <TextBlock FontSize="12"
+                                                       FontWeight="Light"
+                                                       DockPanel.Dock="Right"
+                                                       Margin="14,0"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="LightGray"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding Time, StringFormat=m\\:ss}" />
+                                            <DockPanel LastChildFill="True"
+                                                       Margin="14,0"
+                                                       VerticalAlignment="Center">
+
+                                                <TextBlock FontSize="14"
+                                                           Width="300"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="White"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                                <avalonia:Icon FontSize="24"
+                                                               DockPanel.Dock="Right"
+                                                               Foreground="White"
+                                                               Value="mdi play">
+                                                    <avalonia:Icon.IsVisible>
+                                                        <MultiBinding
+                                                            Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                            <Binding Path="." />
+                                                            <Binding
+                                                                Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                        </MultiBinding>
+                                                    </avalonia:Icon.IsVisible>
+                                                </avalonia:Icon>
+                                                <TextBlock FontSize="14"
+                                                           FontWeight="Light"
+                                                           Foreground="LightGray"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Text="{Binding Artist}" />
+                                            </DockPanel>
+                                        </DockPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <ProgressBar CornerRadius="0"
+                                     
+                                                                 Background="Gray"
+                                                                 Foreground="White"
+                                                                 DockPanel.Dock="Bottom"
+                                                                 MinHeight="2"
+                                                                 Height="5"
+                                                                 VerticalAlignment="Bottom"
+                                                                 Margin="140,0,0,0"
+                                                                 Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                                                 Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                                        <ProgressBar.IsVisible>
+                                                            <MultiBinding
+                                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                <Binding Path="." />
+                                                                <Binding
+                                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                            </MultiBinding>
+                                                        </ProgressBar.IsVisible>
+                                                    </ProgressBar>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
