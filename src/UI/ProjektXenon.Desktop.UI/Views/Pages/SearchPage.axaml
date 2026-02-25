@@ -19,10 +19,10 @@
                 Classes="PageTabsBorder">
             <TextBox Classes="AppBarSearchBox"
                      Foreground="Black"
-                     HorizontalAlignment="Center"
+                     HorizontalAlignment="Left"
                      Margin="0,10"
                      Text="{Binding SearchText}"
-                     Watermark="Search by track name..."
+                     Watermark="Поиск песен"
                      x:Name="SearchBox"
                      DockPanel.Dock="Top">
                 <TextBox.KeyBindings>

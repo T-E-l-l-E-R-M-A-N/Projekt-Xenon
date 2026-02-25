@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 
-namespace ProjektXenon.Desktop.UI.Behaviors;
+namespace ProjektXenon.Mobile.UI.Behaviors;
 
 public sealed class HorizontalWheelScrollBehavior : Avalonia.Xaml.Interactivity.Behavior<ScrollViewer>
 {

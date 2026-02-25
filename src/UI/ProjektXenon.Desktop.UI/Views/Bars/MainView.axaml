@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                xmlns:viewmodels="using:ProjektXenon.Shared.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjektXenon.Desktop.UI.Views.MainView"
+			 x:DataType="viewmodels:MainViewModel">
+	<DockPanel LastChildFill="True">
+		<ContentControl DockPanel.Dock="Bottom"
+						Content="{Binding NowPlaying}"/>
+		<SplitView Pane="{Binding NavMenu}"
+				   IsPaneOpen="{Binding NavMenu.IsOpen}"
+			   OpenPaneLength="300"
+			   CompactPaneLength="80"
+			   DisplayMode="CompactInline">
+			<Grid>
+				<Border Height="54"
+						Background="Transparent"
+						VerticalAlignment="Top"
+						x:Name="CustomTitleBar"/>
+				<TransitioningContentControl Content="{Binding CurrentPage}"/>
+				<ContentControl Content="{Binding MediaContextMenuFlyout}"/>
+			</Grid>
+		</SplitView>
+	</DockPanel>
+</UserControl>

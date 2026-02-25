@@ -1,0 +1,244 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:viewmodels="using:ProjektXenon.Shared.ViewModels"	
+			 xmlns:avalonia="using:Projektanker.Icons.Avalonia"		
+             mc:Ignorable="d" d:DesignWidth="320" d:DesignHeight="700"
+             x:Class="ProjektXenon.Mobile.UI.Views.MainView"
+			 x:DataType="viewmodels:MainViewModel"
+			 Foreground="White">
+	<UserControl.Styles>
+		<Style Selector="Button.NavMenuItem">
+			<Setter Property="RenderTransform" Value="scaleX(1.4)"/>
+			<Setter Property="FontSize" Value="32"/>
+			<Setter Property="FontWeight" Value="Thin"/>
+			<Setter Property="Foreground" Value="LightGray"/>
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border Height="48"
+						Padding="40,0"
+							
+						Classes="NavMenuItemBorder">
+						<TextBlock Text="{TemplateBinding Content, Converter={StaticResource StringCaseConverter}, ConverterParameter=l}"
+								   Foreground="{TemplateBinding Foreground}"
+								   Classes="NavMenuItemText"
+								   HorizontalAlignment="Left"/>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+
+			<Style Selector="^:pointerover">
+				<Style.Animations>
+					<Animation Duration="0:0:0.12"
+							   FillMode="Both">
+						<KeyFrame Cue="0%">
+							<Setter Property="Foreground" Value="LightGray"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="Foreground" Value="White"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+				<Setter Property="Foreground" Value="White"/>
+			</Style>
+
+			<Style Selector="^:not(:pointerover)">
+				<Style.Animations>
+					<Animation Duration="0:0:0.12"
+							   FillMode="Both">
+						<KeyFrame Cue="0%">
+							<Setter Property="Foreground" Value="White"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="Foreground" Value="LightGray"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+				<Setter Property="Foreground" Value="White"/>
+			</Style>
+
+			<Style Selector="^:pressed">
+				<Setter Property="RenderTransform" Value="{x:Null}"/>
+				<Setter Property="Foreground" Value="Gray"/>
+				<Style.Animations>
+					<Animation Duration="0:0:0.12"
+							   FillMode="Backward">
+						<KeyFrame Cue="0%">
+							<Setter Property="ScaleTransform.ScaleX" Value="1"/>
+							<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+						</KeyFrame>
+						<KeyFrame Cue="70%">
+							<Setter Property="ScaleTransform.ScaleX" Value="1.4"/>
+							<Setter Property="ScaleTransform.ScaleY" Value="1.4"/>
+							<Setter Property="Opacity" Value="1"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="ScaleTransform.ScaleX" Value="1.4"/>
+							<Setter Property="ScaleTransform.ScaleY" Value="1.4"/>
+							<Setter Property="Opacity" Value="0"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+			</Style>
+
+			<Style Selector="^:disabled">
+				<Setter Property="RenderTransform" Value="{x:Null}"/>
+				<Setter Property="Foreground" Value="Gray"/>
+			</Style>
+		</Style>
+		<Style Selector="Button.BackButton">
+			<Setter Property="Width" Value="48"/>
+			<Setter Property="Height" Value="48"/>
+			<Setter Property="FontSize" Value="48"/>
+			<Setter Property="FontWeight" Value="Thin"/>
+			<Setter Property="Foreground" Value="LightGray"/>
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border >
+						<ContentPresenter Content="{TemplateBinding Content}"/>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+
+			<Style Selector="^:pointerover">
+				<Style.Animations>
+					<Animation Duration="0:0:0.12"
+							   FillMode="Both">
+						<KeyFrame Cue="0%">
+							<Setter Property="Foreground" Value="LightGray"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="Foreground" Value="White"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+				<Setter Property="Foreground" Value="White"/>
+			</Style>
+
+			<Style Selector="^:not(:pointerover)">
+				<Style.Animations>
+					<Animation Duration="0:0:0.12"
+							   FillMode="Both">
+						<KeyFrame Cue="0%">
+							<Setter Property="Foreground" Value="White"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="Foreground" Value="LightGray"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+				<Setter Property="Foreground" Value="White"/>
+			</Style>
+
+			<Style Selector="^:pressed">
+				<Setter Property="RenderTransform" Value="{x:Null}"/>
+				<Setter Property="Foreground" Value="Gray"/>
+				<Style.Animations>
+					<Animation Duration="0:0:0.12"
+							   FillMode="Backward">
+						<KeyFrame Cue="0%">
+							<Setter Property="ScaleTransform.ScaleX" Value="1"/>
+							<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+						</KeyFrame>
+						<KeyFrame Cue="70%">
+							<Setter Property="ScaleTransform.ScaleX" Value="1.4"/>
+							<Setter Property="ScaleTransform.ScaleY" Value="1.4"/>
+							<Setter Property="Opacity" Value="1"/>
+						</KeyFrame>
+						<KeyFrame Cue="100%">
+							<Setter Property="ScaleTransform.ScaleX" Value="1.4"/>
+							<Setter Property="ScaleTransform.ScaleY" Value="1.4"/>
+							<Setter Property="Opacity" Value="0"/>
+						</KeyFrame>
+					</Animation>
+				</Style.Animations>
+			</Style>
+
+			<Style Selector="^:disabled">
+				<Setter Property="RenderTransform" Value="{x:Null}"/>
+				<Setter Property="Foreground" Value="Gray"/>
+			</Style>
+		</Style>
+
+		<Style Selector="Grid.PageView:not(.IsPresented)">
+			<Setter Property="IsHitTestVisible" Value="False"/>
+			<Style.Animations>
+				<Animation Duration="0:0:0.12"
+						   FillMode="Forward">
+					<KeyFrame Cue="0%">
+						<Setter Property="ScaleTransform.ScaleX" Value="1"/>
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+					</KeyFrame>
+					<KeyFrame Cue="70%">
+						<Setter Property="ScaleTransform.ScaleX" Value="0.5"/>
+						<Setter Property="ScaleTransform.ScaleY" Value="0.5"/>
+						<Setter Property="Opacity" Value="1"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="ScaleTransform.ScaleX" Value="0.5"/>
+						<Setter Property="ScaleTransform.ScaleY" Value="0.5"/>
+						<Setter Property="Opacity" Value="0"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+
+		<Style Selector="Grid.PageView.IsPresented">
+			<Setter Property="IsHitTestVisible" Value="True"/>
+			<Style.Animations>
+				<Animation Duration="0:0:0.12"
+						   FillMode="Forward">
+					<KeyFrame Cue="0%">
+						<Setter Property="ScaleTransform.ScaleX" Value="0.5"/>
+						<Setter Property="ScaleTransform.ScaleY" Value="0.5"/>
+					</KeyFrame>
+					<KeyFrame Cue="70%">
+						<Setter Property="ScaleTransform.ScaleX" Value="1"/>
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+						<Setter Property="Opacity" Value="0"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="ScaleTransform.ScaleX" Value="1"/>
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+						<Setter Property="Opacity" Value="1"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+	</UserControl.Styles>
+	<Border Background="Black">
+		
+		<Grid>
+			<ItemsControl ItemsSource="{Binding NavMenu.Pages}"
+						Margin="0,90">
+
+
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+
+						<Button Height="48"
+								Margin="0,0,0,20"
+								Classes="NavMenuItem"
+								Content="{Binding Name}"
+								Click="OnNavMenuItemClick"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+			<Grid Background="Black"
+				  Classes="PageView"
+				  Classes.IsPresented="{Binding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}">
+				<Button DockPanel.Dock="Top"
+							Classes="BackButton"
+						VerticalAlignment="Top"
+						HorizontalAlignment="Left"
+						IsVisible="False"
+							Click="BackButtonClick">
+					<avalonia:Icon FontSize="32"
+								   Value="mdi arrow-left"/>
+				</Button>
+				<ContentControl Content="{Binding CurrentPage}"></ContentControl>
+			</Grid>
+		</Grid>
+	</Border>
+</UserControl>

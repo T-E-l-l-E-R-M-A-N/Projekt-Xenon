@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
 
-    <ItemGroup>
+	 <ItemGroup>
         <PackageReference Include="AsyncImageLoader.Avalonia" />
         <PackageReference Include="Avalonia" />
         <PackageReference Include="Avalonia.Controls.DataGrid" />
@@ -22,26 +23,20 @@
         <PackageReference Include="Xaml.Behaviors.Avalonia" />
     </ItemGroup>
 
-    <ItemGroup>
-      <AvaloniaResource Include="Assets\avalonia-logo.ico" />
-    </ItemGroup>
+	 <ItemGroup>
+	   <ProjectReference Include="..\..\Shared\ProjektXenon.Shared\ProjektXenon.Shared.csproj" />
+	 </ItemGroup>	
+  <ItemGroup>
+    <Compile Update="App.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
-    <ItemGroup>
-      <AdditionalFiles Include="Views\MainWindow.axaml" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Update="App.axaml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="App.axaml.cs">
-        <DependentUpon>App.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Pages\FavoritesPage.axaml.cs">
-        <DependentUpon>FavoritesPage.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Shared\ProjektXenon.Shared\ProjektXenon.Shared.csproj" />
-    </ItemGroup>
 </Project>

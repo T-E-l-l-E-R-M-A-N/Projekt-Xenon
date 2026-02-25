@@ -39,7 +39,7 @@ public partial class MediaContextMenuFlyoutViewModel : ViewModelBase
         {
             new CommandItemModel()
             {
-                Name = "Play",
+                Name = "Воспроизвести",
                 Command = new RelayCommand(() =>
                 {
                     _mainViewModel.PlayMediaCommand.Execute(Media);
@@ -50,7 +50,7 @@ public partial class MediaContextMenuFlyoutViewModel : ViewModelBase
             },
             new CommandItemModel()
             {
-                Name = Media.IsFavorite ? "Remove favorite" : "Mark favorite",
+                Name = Media.IsFavorite ? "Удалить из избранного" : "Добавить в избранное",
                 Command = new AsyncRelayCommand(async () =>
                 {
                     Media.IsFavorite = !(Media as Models.MediaItem).IsFavorite;
@@ -84,19 +84,19 @@ public partial class MediaContextMenuFlyoutViewModel : ViewModelBase
             },
             new CommandItemModel()
             {
-                Name = $"Search by {Media.Name}",
+                Name = $"Поиск {Media.Name}",
                 Command = new AsyncRelayCommand(async () => { await _mainViewModel.SearchCommand.ExecuteAsync(Media.Name); CloseContextMenu();}),
                 
             },
             new CommandItemModel()
             {
-                Name = $"Search by {Media.Artist}",
+                Name = $"Поиск {Media.Artist}",
                 Command = new AsyncRelayCommand(async () => { await _mainViewModel.SearchCommand.ExecuteAsync(Media.Artist); CloseContextMenu();}),
                 
             },
             new CommandItemModel()
             {
-                Name = "Dismiss",
+                Name = "Закрыть",
                 Command = CloseContextMenuCommand,
                 
             }

@@ -58,8 +58,8 @@ public class UniversalAudioEngine
 
     private void OnPlayerOnMediaLoaded(int i)
     {
-        _player?.MediaLoaded -= OnPlayerOnMediaLoaded;
-        Play();
+        //_player?.MediaLoaded -= OnPlayerOnMediaLoaded;
+        //Play();
     }
 
     public void Play()

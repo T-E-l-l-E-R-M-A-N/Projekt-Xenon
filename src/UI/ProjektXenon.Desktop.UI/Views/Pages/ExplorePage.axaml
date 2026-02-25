@@ -29,15 +29,16 @@
             </Setter>
 
             <Style Selector="^:pointerover">
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="Pink" />
             </Style>
 
             <Style Selector="^:selected">
-                <Setter Property="Foreground" Value="LightGray" />
+                <Setter Property="Foreground" Value="DeepPink" />
             </Style>
 
-            <Style Selector="^[IsEnabled=False]">
-                <Setter Property="Foreground" Value="#20FFFFFF" />
+            <Style Selector="^:disabled">
+                <Setter Property="Width" Value="0" />
+				<Setter Property="Margin" Value="0,0,0,0" />
             </Style>
         </Style>
 
@@ -145,18 +146,19 @@
                                 <TextBlock
                                     Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Time, StringFormat=m\\:ss}"
                                     FontSize="18"
-                                    Foreground="LightGray"
+                                    Foreground="{Binding $parent[views:MainView].Foreground}"
                                     FontWeight="Light" />
                                 <TextBlock
                                     Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
                                     TextTrimming="CharacterEllipsis"
                                     FontSize="38"
+									Foreground="HotPink"
                                     FontWeight="SemiBold" />
                                 <TextBlock
                                     Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Artist}"
                                     TextTrimming="CharacterEllipsis"
                                     FontSize="18"
-                                    Foreground="LightGray"
+                                    Foreground="{Binding $parent[views:MainView].Foreground}"
                                     FontWeight="Light" />
                             </StackPanel>
                         </DockPanel>
@@ -174,7 +176,8 @@
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal"
-                                               ItemsAlignment="Center"
+											   VerticalAlignment="Center"
+                                               ItemsAlignment="Start"
                                                Width="675"
                                                ItemSpacing="8"
                                                LineSpacing="8" />
@@ -252,6 +255,7 @@
                                                         <TextBlock VerticalAlignment="Center"
                                                                    Margin="10,0"
                                                                    FontSize="16"
+																   Foreground="White"
                                                                    FontWeight="SemiBold"
                                                                    TextTrimming="CharacterEllipsis"
                                                                    Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
@@ -291,7 +295,9 @@
                                             <ControlTemplate>
                                                 <Border Height="90"
                                                         Width="370"
-                                                        Background="#0F0F0F">
+														BorderThickness="1"
+														BorderBrush="Gray"
+                                                        Background="Transparent">
                                                     <DockPanel LastChildFill="True">
                                                         <Border Width="140"
                                                                 DockPanel.Dock="Left"
@@ -311,7 +317,7 @@
                                                                     VerticalAlignment="Center" />
                                                                 <ProgressBar CornerRadius="0"
                                                                              Background="Gray"
-                                                                             Foreground="White"
+                                                                             Foreground="Pink"
                                                                              DockPanel.Dock="Bottom"
                                                                              MinHeight="2"
                                                                              Height="5"
@@ -347,7 +353,7 @@
                                                                 </Button>
                                                                 <TextBlock FontSize="14"
                                                                            FontWeight="SemiBold"
-                                                                           Foreground="White"
+                                                                           Foreground="{Binding $parent[views:MainView].Foreground}"
                                                                            TextTrimming="CharacterEllipsis"
                                                                            Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
                                                             </DockPanel>
@@ -361,11 +367,11 @@
                                                                 <TextBlock FontSize="12"
                                                                            FontWeight="Light"
                                                                            Margin="0,10,0,0"
-                                                                           Foreground="LightGray"
+                                                                           Foreground="{Binding $parent[views:MainView].Foreground}"
                                                                            TextTrimming="CharacterEllipsis"
                                                                            Text="{Binding Time, StringFormat=m\\:ss}" />
                                                                 <avalonia:Icon FontSize="24"
-                                                                               Foreground="White"
+                                                                               Foreground="{Binding $parent[views:MainView].Foreground}"
                                                                                Value="mdi play">
                                                                     <avalonia:Icon.IsVisible>
                                                                         <MultiBinding
@@ -395,11 +401,12 @@
                        Margin="30,0">
                 <TextBlock Margin="0,0"
                            FontSize="38"
+						   Foreground="{Binding $parent[views:MainView].Foreground}"
                            FontWeight="Light"
                            Text="для вас" />
                 <TextBox Classes="AppBarSearchBox"
                          Foreground="Black"
-                         Watermark="Search by track name..."
+                         Watermark="Поиск песен"
                          x:Name="SearchBox"
                          DockPanel.Dock="Right">
                     <TextBox.KeyBindings>

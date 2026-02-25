@@ -4,7 +4,7 @@ using Avalonia.Controls.Templates;
 using ProjektXenon.Shared.Models;
 using ProjektXenon.Shared.ViewModels;
 
-namespace ProjektXenon.Desktop.UI;
+namespace ProjektXenon.Mobile.UI;
 
 /// <summary>
 /// Given a view model, returns the corresponding view if possible.

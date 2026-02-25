@@ -15,15 +15,16 @@
     <Grid RowDefinitions="*, *">
         <Border>
             <Grid>
-                <Image
+                <Image Margin="0,64,0,0"
                     asyncImageLoader:ImageLoader.Source="https://i.pinimg.com/originals/c1/0c/c9/c10cc989d42e1da1f948ec02f435f976.jpg"
                     Stretch="UniformToFill"
                     Opacity="0.5">
                 </Image>
                 <TextBlock Margin="30"
                            FontSize="38"
+						   Foreground="White"
                            FontWeight="Light"
-                           Text="список воспроизведения" />
+                           Text="" />
                 <DockPanel LastChildFill="True"
                        VerticalAlignment="Bottom"
                        Margin="30">
@@ -42,30 +43,32 @@
                     </Grid>
                 </Border>
                 <StackPanel VerticalAlignment="Bottom"
+							Background="Black"
                             Margin="24,0">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="4">
                         <TextBlock
                             Text="{Binding CurrentTime, StringFormat=m\\:ss}"
                             FontSize="14"
-                            Foreground="LightGray"
+                            Foreground="White"
                             FontWeight="Light" />
                         <TextBlock
                             Text="{Binding ((models:MediaItem)CurrentMedia).Time, StringFormat=m\\:ss}"
                             FontSize="14"
-                            Foreground="Gray"
+                            Foreground="White"
                             FontWeight="Light" />
                     </StackPanel>
                     <TextBlock
                         Text="{Binding ((models:MediaItem)CurrentMedia).Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
                         TextTrimming="CharacterEllipsis"
+						Foreground="White"
                         FontSize="24"
                         FontWeight="SemiBold" />
                     <TextBlock
                         Text="{Binding ((models:MediaItem)CurrentMedia).Artist}"
                         TextTrimming="CharacterEllipsis"
                         FontSize="18"
-                        Foreground="LightGray"
+                        Foreground="White"
                         FontWeight="Light" />
                 </StackPanel>
             </DockPanel>
@@ -83,25 +86,27 @@
                             CommandParameter="{Binding .}">
                             <Button.Template>
                                 <ControlTemplate>
-                                    <Border Height="90"
+                                    <Border Height="50"
                                             Width="{Binding $parent[ItemsControl].Bounds.Width}"
-                                            Background="#0F0F0F">
+                                            BorderThickness="1"
+														BorderBrush="Gray"
+                                                        Background="Transparent">
                                         <DockPanel LastChildFill="True">
-                                            <Border Width="140"
+                                            <Border Width="50"
                                                     DockPanel.Dock="Left"
                                                     Background="Gray"
                                                     ClipToBounds="True">
 
                                                 <Grid>
-                                                    <avalonia:Icon FontSize="80"
+                                                    <avalonia:Icon FontSize="24"
                                                                    Foreground="DarkGray"
                                                                    Value="mdi headphones"
                                                                    VerticalAlignment="Bottom"
                                                                    Margin="0,0,0,-14" />
                                                     <Image
                                                         asyncImageLoader:ImageLoader.Source="{Binding Image}"
-                                                        Width="140"
-                                                        Height="140"
+                                                        Width="50"
+                                                        Height="50"
                                                         VerticalAlignment="Center" />
                                                     
                                                 </Grid>
@@ -112,7 +117,7 @@
                                                        DockPanel.Dock="Right"
                                                        Margin="14,0"
                                                        VerticalAlignment="Center"
-                                                       Foreground="LightGray"
+                                                       Foreground="{Binding $parent[Button].Foreground}"
                                                        TextTrimming="CharacterEllipsis"
                                                        Text="{Binding Time, StringFormat=m\\:ss}" />
                                             <DockPanel LastChildFill="True"
@@ -122,12 +127,12 @@
                                                 <TextBlock FontSize="14"
                                                            Width="300"
                                                            FontWeight="SemiBold"
-                                                           Foreground="White"
+                                                           Foreground="{Binding $parent[Button].Foreground}"
                                                            TextTrimming="CharacterEllipsis"
                                                            Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
                                                 <avalonia:Icon FontSize="24"
                                                                DockPanel.Dock="Right"
-                                                               Foreground="White"
+                                                               Foreground="{Binding $parent[Button].Foreground}"
                                                                Value="mdi play">
                                                     <avalonia:Icon.IsVisible>
                                                         <MultiBinding
@@ -140,7 +145,7 @@
                                                 </avalonia:Icon>
                                                 <TextBlock FontSize="14"
                                                            FontWeight="Light"
-                                                           Foreground="LightGray"
+                                                           Foreground="{Binding $parent[Button].Foreground}"
                                                            TextTrimming="CharacterEllipsis"
                                                            Text="{Binding Artist}" />
                                             </DockPanel>
@@ -152,12 +157,12 @@
                         <ProgressBar CornerRadius="0"
                                      
                                                                  Background="Gray"
-                                                                 Foreground="White"
+                                                                 Foreground="Pink"
                                                                  DockPanel.Dock="Bottom"
                                                                  MinHeight="2"
-                                                                 Height="5"
+                                                                 Height="2"
                                                                  VerticalAlignment="Bottom"
-                                                                 Margin="140,0,0,0"
+                                                                 Margin="50,0,0,0"
                                                                  Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
                                                                  Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
                                                         <ProgressBar.IsVisible>

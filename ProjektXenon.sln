@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjektXenon.iOS.Startup", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjektXenon.Android.Startup", "src\Startup\ProjektXenon.Android.Startup\ProjektXenon.Android.Startup.csproj", "{AB5DBD31-C57D-48A2-9AA7-6740C048DE8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjektXenon.Mobile.UI", "src\UI\ProjektXenon.Mobile.UI\ProjektXenon.Mobile.UI.csproj", "{9503CB91-F16F-49D6-AE5D-C6018D7B68B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,12 +54,13 @@ Global
 		{AB5DBD31-C57D-48A2-9AA7-6740C048DE8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB5DBD31-C57D-48A2-9AA7-6740C048DE8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB5DBD31-C57D-48A2-9AA7-6740C048DE8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9503CB91-F16F-49D6-AE5D-C6018D7B68B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9503CB91-F16F-49D6-AE5D-C6018D7B68B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9503CB91-F16F-49D6-AE5D-C6018D7B68B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9503CB91-F16F-49D6-AE5D-C6018D7B68B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {83CB65B8-011F-4ED7-BCD3-A6CFA935EF7E}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{27353B3A-A304-4EDB-912C-547BC58BA17A} = {88343654-5825-4DE8-9023-06BE4140D048}
@@ -68,5 +71,9 @@ Global
 		{5A5AEC93-DAB0-4AD1-8EBD-90905E4E3546} = {D103ABC3-CD71-4ECB-8F10-DD7A256362F9}
 		{60FA1BB2-9A0B-4CB0-825A-A65E59455FD6} = {D103ABC3-CD71-4ECB-8F10-DD7A256362F9}
 		{AB5DBD31-C57D-48A2-9AA7-6740C048DE8E} = {D103ABC3-CD71-4ECB-8F10-DD7A256362F9}
+		{9503CB91-F16F-49D6-AE5D-C6018D7B68B1} = {275C7B58-7AF5-47FC-8E9D-FB689D5B14F8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83CB65B8-011F-4ED7-BCD3-A6CFA935EF7E}
 	EndGlobalSection
 EndGlobal

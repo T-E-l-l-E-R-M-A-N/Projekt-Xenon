@@ -2,7 +2,7 @@
 using Avalonia;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
-using ProjektXenon.Desktop.UI;
+using ProjektXenon.Mobile.UI;
 
 namespace ProjektXenon.Desktop.Startup;
 

@@ -9,8 +9,16 @@
         Icon="/Assets/avalonia-logo.ico"
         MinWidth="895"
         MinHeight="835"
-        MaxHeight="1070"
-        MaxWidth="1700"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaTitleBarHeightHint="54"
         Title="ProjektXenon">
+	<Window.Styles>
+		<Style Selector="Window /template/ CaptionButtons">
+			<Setter Property="Margin" Value="30,20"/>
+		</Style>
+		<Style Selector="Window /template/ CaptionButtons Button.PART_FullScreenButton">
+			<Setter Property="IsVisible" Value="True"/>
+		</Style>
+	</Window.Styles>
         <views:MainView/>
 </Window>
