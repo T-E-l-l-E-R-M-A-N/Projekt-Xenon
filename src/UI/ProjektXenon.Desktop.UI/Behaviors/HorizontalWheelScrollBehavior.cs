@@ -10,13 +10,13 @@ public sealed class HorizontalWheelScrollBehavior : Avalonia.Xaml.Interactivity.
     protected override void OnAttached()
     {
         base.OnAttached();
-        AssociatedObject?.PointerWheelChanged += AssociatedObjectOnPointerWheelChanged;
+        AssociatedObject.PointerWheelChanged += AssociatedObjectOnPointerWheelChanged;
     }
 
     protected override void OnDetaching()
     {
         base.OnDetaching();
-        AssociatedObject?.PointerWheelChanged -= AssociatedObjectOnPointerWheelChanged;
+        AssociatedObject.PointerWheelChanged -= AssociatedObjectOnPointerWheelChanged;
     }
 
     private void AssociatedObjectOnPointerWheelChanged(object? sender, PointerWheelEventArgs e)

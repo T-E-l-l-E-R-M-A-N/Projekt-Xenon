@@ -88,14 +88,16 @@
         
         <Style Selector="Button.CommandButton">
             <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="Height" Value="48"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Template">
                 <ControlTemplate>
                     <Border Background="{TemplateBinding Background}">
                         <ContentPresenter Content="{TemplateBinding Content}"
+										  HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
+										  
                                           Margin="10,0"/>
                     </Border>
                 </ControlTemplate>
@@ -131,10 +133,12 @@
                 <TextBlock Margin="0,0"
                            FontSize="38"
                            FontWeight="Light"
+						   Foreground="{Binding $parent[views:MainView].Foreground}"
                            Text="нравится" />
+				
                 <TextBox Classes="AppBarSearchBox"
                          Foreground="Black"
-                         Watermark="Search by track name..."
+                         Watermark="Поиск песен"
                          x:Name="SearchBox"
                          DockPanel.Dock="Right">
                     <TextBox.KeyBindings>
@@ -147,6 +151,20 @@
             </DockPanel>
 
         </Border>
+		<StackPanel VerticalAlignment="Bottom"
+					DockPanel.Dock="Top"
+                        Spacing="4"
+                        Orientation="Horizontal"
+                        Margin="24,12">
+			<Button Classes="CommandButton"
+					Command="{Binding PlayAllCommand}">
+				<TextBlock Text="ВОСПРОИЗВЕСТИ ВСЕ"/>
+			</Button>
+			<Button Classes="CommandButton"
+					Command="{Binding ShuffleCommand}">
+				<TextBlock Text="ПЕРЕМЕШАТЬ"/>
+			</Button>
+		</StackPanel>
         <Grid>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto"
@@ -234,6 +252,7 @@
                                                     <TextBlock VerticalAlignment="Center"
                                                                Margin="10,0"
                                                                FontSize="16"
+															   Foreground="White"
                                                                FontWeight="SemiBold"
                                                                TextTrimming="CharacterEllipsis"
                                                                Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
@@ -248,19 +267,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <StackPanel VerticalAlignment="Bottom"
-                        Spacing="4,0"
-                        Orientation="Horizontal"
-                        Margin="30">
-                <Button Classes="CommandButton"
-                        Command="{Binding PlayAllCommand}">
-                    <TextBlock Text="PLAY ALL"/>
-                </Button>
-                <Button Classes="CommandButton"
-                        Command="{Binding ShuffleCommand}">
-                    <TextBlock Text="SHUFFLE"/>
-                </Button>
-            </StackPanel>
+            
         </Grid>
     </DockPanel>
 </UserControl>
