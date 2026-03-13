@@ -39,14 +39,22 @@
                         <Button Command="{Binding $parent[ItemsControl].((viewModels:NavMenuFlyoutViewModel)DataContext).NavigateCommand}"
                                 CommandParameter="{Binding .}"
                                 IsEnabled="{Binding IsAvailable}">
-                            <Style Selector="Button:disabled">
-                                <Setter Property="Opacity" Value="0.5"/>
-                            </Style>
                             <Button.Template>
                                 <ControlTemplate>
                                     <Border Height="48"
+                                            Classes="PageItem"
+                                            
+                                            Classes.IsAvailable="{Binding IsAvailable}"
                                             Background="Transparent"
                                             Padding="30,0">
+                                        <Border.Styles>
+                                            <Style Selector="Border.PageItem.IsAvailable">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </Style>
+                                            <Style Selector="Border.PageItem:not(.IsAvailable)">
+                                                <Setter Property="Opacity" Value="0.5"/>
+                                            </Style>
+                                        </Border.Styles>
                                         <StackPanel Orientation="Horizontal"
                                                     Spacing="18"
                                                     VerticalAlignment="Center">

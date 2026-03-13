@@ -1,0 +1,285 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             xmlns:views="clr-namespace:ProjektXenon.Mobile.UI.Views"
+             xmlns:valueConverters="clr-namespace:ProjektXenon.Mobile.UI.ValueConverters"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:shared="clr-namespace:ProjektXenon.Shared;assembly=ProjektXenon.Shared"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="ProjektXenon.Mobile.UI.Views.ExplorePage"
+             x:DataType="viewModels:ExplorePageViewModel">
+    <UserControl.Styles>
+        <Style Selector="TabControl.PageTabsView TabItem">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="MinHeight" Value="18" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="{TemplateBinding Header, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
+                               FontSize="24"
+                               FontWeight="SemiBold"
+                               Foreground="{TemplateBinding Foreground}" />
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="Gray" />
+            </Style>
+
+            <Style Selector="^:selected">
+                <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            </Style>
+
+            <Style Selector="^[IsEnabled=False]">
+                <Setter Property="Foreground" Value="#20FFFFFF" />
+            </Style>
+        </Style>
+
+        <Style Selector="TabControl.PageTabsView">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True">
+
+                        <ItemsPresenter DockPanel.Dock="Top">
+                            <ItemsPresenter.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsPresenter.ItemsPanel>
+                        </ItemsPresenter>
+                        <TransitioningContentControl Content="{TemplateBinding SelectedContent}"
+                                                     ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+    <Grid>
+        <Button VerticalAlignment="Top"
+                Classes="PageTitleLabel"
+                ClipToBounds="False"
+                Command="{Binding $parent[views:MainView].BackButtonCommand}"
+                x:Name="BackButton"
+                Height="140"
+                Content="{Binding Name}">
+            <Button.Template>
+                <ControlTemplate>
+                    <Border Background="Transparent"
+                            Width="400"
+                            ClipToBounds="False"
+                            Height="140">
+                        <TextBlock
+                            Text="{TemplateBinding Content, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}">
+                            <TextBlock.OpacityMask>
+                                <LinearGradientBrush StartPoint="0% 0%"
+                                                     EndPoint="0% 100%">
+                                    <GradientStop Offset="0.6" Color="Transparent" />
+                                    <GradientStop Offset="0.68" Color="Black" />
+                                </LinearGradientBrush>
+                            </TextBlock.OpacityMask>
+                            <TextBlock.Transitions>
+                                <Transitions>
+                                    <BrushTransition Property="Foreground" Easing="CubicEaseOut"
+                                                     Duration="0:0:0.8" />
+                                    <DoubleTransition Property="FontSize" Easing="CubicEaseOut"
+                                                      Duration="0:0:0.10" />
+                                </Transitions>
+                            </TextBlock.Transitions>
+                        </TextBlock>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TabControl Classes="PageTabsView" IsVisible="True"
+                    Margin="0,100,0,0"
+                    SelectedIndex="1">
+            <TabItem Header="{x:Static shared:Strings.ExplorePageFeaturedTabText}"
+                     IsEnabled="{Binding Favorites, Converter={valueConverters:HasItemsConverter}}">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Favorites}"
+                                  Margin="0,8,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"
+                                           LineSpacing="6"
+                                           ItemSpacing="6" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                                    CommandParameter="{Binding .}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border Background="{DynamicResource PrimaryBackgroundBrush}"
+                                                    Width="150"
+                                                    Height="150"
+                                                    x:Name="AlbumArtView"
+                                                    BorderThickness="1"
+                                                    BorderBrush="{DynamicResource SecondaryForegroundBrush}">
+                                                <Grid>
+                                                    <avalonia:Icon FontSize="50"
+                                                                   Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                   Value="mdi headphones" />
+
+                                                    <Image asyncImageLoader:ImageLoader.Source="{Binding Image}"
+                                                           Stretch="UniformToFill" />
+                                                    <Grid Background="#90000000"
+                                                          VerticalAlignment="Bottom">
+                                                        <DockPanel LastChildFill="True"
+                                                                   Margin="0,10">
+                                                            <avalonia:Icon FontSize="20"
+                                                                           DockPanel.Dock="Right"
+                                                                           Foreground="White"
+                                                                           VerticalAlignment="Top"
+                                                                           HorizontalAlignment="Left"
+                                                                           Value="mdi play">
+
+                                                                <avalonia:Icon.IsVisible>
+                                                                    <MultiBinding
+                                                                        Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                        <Binding Path="." />
+                                                                        <Binding
+                                                                            Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                                    </MultiBinding>
+                                                                </avalonia:Icon.IsVisible>
+                                                            </avalonia:Icon>
+                                                            <StackPanel Margin="10,0"
+                                                                        Spacing="3"
+                                                                        VerticalAlignment="Top">
+                                                                <TextBlock FontSize="16"
+                                                                           FontWeight="SemiBold"
+                                                                           Foreground="White"
+                                                                           TextTrimming="CharacterEllipsis"
+                                                                           Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                                                <TextBlock FontSize="14"
+                                                                           FontWeight="Light"
+                                                                           Foreground="Gray"
+                                                                           TextTrimming="CharacterEllipsis"
+                                                                           Text="{Binding Artist, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                                            </StackPanel>
+                                                        </DockPanel>
+                                                        <ProgressBar CornerRadius="0"
+                                                                     Background="Transparent"
+                                                                     Foreground="{DynamicResource AccentBrush}"
+                                                                     VerticalAlignment="Bottom"
+                                                                     MinHeight="2"
+                                                                     MaxWidth="90"
+                                                                     Width="{Binding #AlbumArtView.Bounds.Width}"
+                                                                     MinWidth="{Binding #AlbumArtView.Bounds.Width}"
+                                                                     Height="5"
+                                                                     Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                                                     Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                                            <ProgressBar.IsVisible>
+                                                                <MultiBinding
+                                                                    Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                    <Binding Path="." />
+                                                                    <Binding
+                                                                        Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                                </MultiBinding>
+                                                            </ProgressBar.IsVisible>
+                                                        </ProgressBar>
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{x:Static shared:Strings.ExplorePageAllTabText}">
+                <ScrollViewer>
+                    <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).PlayMediaCommand}"
+                                    CommandParameter="{Binding .}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True" Height="90" Background="Transparent"
+                                                       Margin="0,0,0,6">
+                                                <Border Background="{DynamicResource PrimaryBackgroundBrush}"
+                                                        Width="90"
+                                                        Height="90"
+                                                        x:Name="AlbumArtView"
+                                                        BorderThickness="1"
+                                                        BorderBrush="{DynamicResource SecondaryForegroundBrush}">
+                                                    <Grid>
+                                                        <avalonia:Icon FontSize="50"
+                                                                       Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                       Value="mdi headphones" />
+                                                        <Image asyncImageLoader:ImageLoader.Source="{Binding Image}"
+                                                               Stretch="UniformToFill" />
+                                                        <ProgressBar CornerRadius="0"
+                                                                     Background="{DynamicResource SecondaryForegroundBrush}"
+                                                                     Foreground="White"
+                                                                     VerticalAlignment="Bottom"
+                                                                     MinHeight="2"
+                                                                     MaxWidth="90"
+                                                                     Width="{Binding #AlbumArtView.Bounds.Width}"
+                                                                     MinWidth="{Binding #AlbumArtView.Bounds.Width}"
+                                                                     Height="5"
+                                                                     Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
+                                                                     Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
+                                                            <ProgressBar.IsVisible>
+                                                                <MultiBinding
+                                                                    Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                    <Binding Path="." />
+                                                                    <Binding
+                                                                        Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                                </MultiBinding>
+                                                            </ProgressBar.IsVisible>
+                                                        </ProgressBar>
+                                                    </Grid>
+                                                </Border>
+                                                <StackPanel Margin="8,0,0,0">
+                                                    <TextBlock FontSize="12"
+                                                               Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                               Text="{Binding Time, StringFormat=m\\:ss}" />
+                                                    <TextBlock FontSize="28"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{DynamicResource ForegroundBrush}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Text="{Binding Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                                    <TextBlock FontSize="20"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Text="{Binding Artist, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                                                    <avalonia:Icon FontSize="16"
+                                                                   HorizontalAlignment="Left"
+                                                                   Foreground="{DynamicResource ForegroundBrush}"
+                                                                   Value="mdi play">
+                                                        <avalonia:Icon.IsVisible>
+                                                            <MultiBinding
+                                                                Converter="{valueConverters:CurrentMediaIdIsEqualToMediaItemConverter}">
+                                                                <Binding Path="." />
+                                                                <Binding
+                                                                    Path="$parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia" />
+                                                            </MultiBinding>
+                                                        </avalonia:Icon.IsVisible>
+                                                    </avalonia:Icon>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</UserControl>

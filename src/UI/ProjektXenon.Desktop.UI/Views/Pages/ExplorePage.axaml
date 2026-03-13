@@ -99,69 +99,6 @@
                         VerticalAlignment="Top"
                         Classes="PageTabsView"
                         x:Name="Tabs">
-                <TabItem Header="Сейчас играет"
-                         IsEnabled="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.CurrentMedia, Converter={x:Static ObjectConverters.IsNotNull}}">
-                    <Grid>
-                        <Image
-                            asyncImageLoader:ImageLoader.Source="https://i.pinimg.com/originals/c1/0c/c9/c10cc989d42e1da1f948ec02f435f976.jpg"
-                            Stretch="UniformToFill"
-                            Opacity="0.2">
-                        </Image>
-                        <DockPanel LastChildFill="True"
-
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   MaxWidth="700">
-                            <Border Width="300"
-                                    Height="300"
-                                    Background="DimGray">
-                                <Grid>
-                                    <avalonia:Icon FontSize="200"
-                                                   Value="mdi headphones"
-                                                   Foreground="Gray" />
-                                    <Image
-                                        asyncImageLoader:ImageLoader.Source="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Image}"
-                                        Width="300"
-                                        Height="300"
-                                        VerticalAlignment="Center" />
-                                    <ProgressBar CornerRadius="0"
-                                                 Background="Transparent"
-                                                 Foreground="White"
-                                                 DockPanel.Dock="Bottom"
-                                                 MinHeight="2"
-                                                 Height="5"
-                                                 Width="300"
-                                                 HorizontalAlignment="Left"
-                                                 MinWidth="300"
-                                                 VerticalAlignment="Bottom"
-                                                 Margin="0,0"
-                                                 Maximum="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.TotalTime}"
-                                                 Value="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.Position}">
-                                    </ProgressBar>
-                                </Grid>
-                            </Border>
-                            <StackPanel VerticalAlignment="Bottom"
-                                        Margin="24,0">
-                                <TextBlock
-                                    Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Time, StringFormat=m\\:ss}"
-                                    FontSize="18"
-                                    Foreground="LightGray"
-                                    FontWeight="Light" />
-                                <TextBlock
-                                    Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
-                                    TextTrimming="CharacterEllipsis"
-                                    FontSize="38"
-                                    FontWeight="SemiBold" />
-                                <TextBlock
-                                    Text="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).NowPlaying.((models:MediaItem)CurrentMedia).Artist}"
-                                    TextTrimming="CharacterEllipsis"
-                                    FontSize="18"
-                                    Foreground="LightGray"
-                                    FontWeight="Light" />
-                            </StackPanel>
-                        </DockPanel>
-                    </Grid>
-                </TabItem>
                 <TabItem Header="Нравится"
                          IsEnabled="{Binding Favorites, Converter={valueConverters:HasItemsConverter}}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
@@ -268,7 +205,7 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Подборка">
-                    <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden"
                                   HorizontalScrollBarVisibility="Auto">
                         <Interaction.Behaviors>
                             <HorizontalScrollViewerBehavior />

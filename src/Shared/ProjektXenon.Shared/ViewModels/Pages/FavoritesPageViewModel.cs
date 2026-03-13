@@ -8,7 +8,7 @@ public partial class FavoritesPageViewModel : ViewModelBase, IPage
 {
     #region Page Base
 
-    public string Name => "Нравится";
+    public string Name => Strings.FeaturedPageTitle;
     public PageType Type => PageType.Favorites;
 
     #endregion
@@ -18,6 +18,7 @@ public partial class FavoritesPageViewModel : ViewModelBase, IPage
     private readonly TrackRepositoryService _trackRepository;
     private readonly MediaPlaybackService _playbackService;
     private readonly NavigationService _navigationService;
+    private bool _isAvailable;
 
     #endregion
 
@@ -27,7 +28,13 @@ public partial class FavoritesPageViewModel : ViewModelBase, IPage
 
     [ObservableProperty] private IViewStyle _view;
     [ObservableProperty] private ObservableCollection<IViewStyle> _views;
-    [ObservableProperty] private bool _isAvailable;
+    
+
+    public bool IsAvailable
+    {
+        get => Favorites?.Count > 0;
+        set => OnPropertyChanged();
+    }
     //[ObservableProperty] private ObservableCollection<PlaylistItem>? _savedPlaylists;
 
     #endregion

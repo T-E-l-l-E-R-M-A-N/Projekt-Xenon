@@ -1,4 +1,6 @@
-﻿namespace ProjektXenon.Shared.ViewModels;
+﻿using System.Collections.ObjectModel;
+
+namespace ProjektXenon.Shared.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -18,6 +20,13 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private NowPlayingFlyoutViewModel? _nowPlayingFlyout;
     [ObservableProperty] private CommandBarViewModel? _commandBar;
     [ObservableProperty] private MediaContextMenuFlyoutViewModel? _mediaContextMenuFlyout;
+    [ObservableProperty] private ObservableCollection<MediaItem>? _favorites;
+
+    #endregion
+
+    #region Events
+
+    public event EventHandler? RequestFullScreen;
 
     #endregion
 
@@ -54,8 +63,12 @@ public partial class MainViewModel : ViewModelBase
 
         (CurrentPage as ExplorePageViewModel).Init();
 
-        NavMenu.Pages.OfType<FavoritesPageViewModel>().FirstOrDefault().Init();
+        
+        
         NavMenu.Pages.OfType<NowPlayingPageViewModel>().FirstOrDefault().Init();
+        NavMenu.Pages.OfType<FavoritesPageViewModel>().FirstOrDefault().Init();
+        IoC.Resolve<TrackRepositoryService>().FavoritesChanged += OnFavoritesChanged;
+        OnFavoritesChanged(IoC.Resolve<TrackRepositoryService>(), EventArgs.Empty);
     }
 
     
@@ -103,6 +116,31 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    private void OpenFullScreenView()
+    {
+        RequestFullScreen?.Invoke(this, EventArgs.Empty);
+    }
+    [RelayCommand]
+    private async Task PlayFavorites()
+    {
+        var playlist = new PlaylistItem()
+        {
+            Id = Random.Shared.Next(),
+            Name = "Current",
+            Media = []
+        };
+
+        if (Favorites != null && Favorites.Any())
+        {
+            foreach (var track in Favorites)
+                playlist.Media.Add((Models.MediaItem)track);
+        }
+
+        _mediaPlaybackService.SetPlaylist(playlist);
+        await _mediaPlaybackService.OpenPlayAsync(playlist.Media[0]);
+    }
+
     #endregion
 
     #region Events Handlers
@@ -111,6 +149,14 @@ public partial class MainViewModel : ViewModelBase
     {
         CurrentPage = e;
         ReturnCommand?.NotifyCanExecuteChanged();
+    }
+    private async void OnFavoritesChanged(object? sender, EventArgs e)
+    {
+        var favs = await IoC.Resolve<TrackRepositoryService>().GetFavoritesAsync();
+        if (favs != null)
+        {
+            Favorites = new ObservableCollection<MediaItem>(favs);
+        }
     }
 
     #endregion

@@ -4,7 +4,7 @@ using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using ProjektXenon.Desktop.UI;
 
-namespace ProjektXenon.Desktop.Startup;
+namespace ProjektXenon.Desktop;
 
 sealed class Program
 {

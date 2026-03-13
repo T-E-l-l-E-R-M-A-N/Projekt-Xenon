@@ -1,0 +1,77 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ExplorePageTitle" xml:space="preserve">
+        <value>обзор</value>
+    </data>
+    <data name="SettingsPagePageSectionThemeTitle" xml:space="preserve">
+        <value>ТЕМА ОФОРМЛЕНИЯ</value>
+    </data>
+    <data name="SettingsPageTitle" xml:space="preserve">
+        <value>настройки</value>
+    </data>
+    <data name="NowPlayingPageTitle" xml:space="preserve">
+        <value>текущий трек</value>
+    </data>
+    <data name="AboutPageTitle" xml:space="preserve">
+        <value>о приложении</value>
+    </data>
+    <data name="FeaturedPageTitle" xml:space="preserve">
+        <value>нравится</value>
+    </data>
+    <data name="ExplorePageFeaturedTabText" xml:space="preserve">
+        <value>НРАВИТСЯ</value>
+    </data>
+    <data name="ExplorePageAllTabText" xml:space="preserve">
+        <value>ПОДБОРКА</value>
+    </data>
+    <data name="SettingsPagePageSectionLanguageTitle" xml:space="preserve">
+        <value>ЯЗЫК ИНТЕРФЕЙСА</value>
+    </data>
+    <data name="SettingsPagePageSectionFeaturedTitle" xml:space="preserve">
+        <value>НРАВИТСЯ</value>
+    </data>
+    <data name="ActionClearAllText" xml:space="preserve">
+        <value>ОЧИСТИТЬ</value>
+    </data>
+    <data name="SearchPageTitle" xml:space="preserve">
+        <value>поиск</value>
+    </data>
+    <data name="NavMenuItemHintNowPlaying" xml:space="preserve">
+        <value>НЕ ВОСПРОИЗВОДИТСЯ</value>
+    </data>
+    <data name="NavMenuItemHintSearch" xml:space="preserve">
+        <value>ПО НАЗВАНИЮ, ПО ИСПОЛНИТЕЛЮ</value>
+    </data>
+    <data name="NavMenuItemHintFeatured" xml:space="preserve">
+        <value>ПЕСЕН</value>
+    </data>
+    <data name="HomeViewListenText" xml:space="preserve">
+        <value>СЛУШАТЬ</value>
+    </data>
+    <data name="HomeViewFeaturedItemsText" xml:space="preserve">
+        <value>МОЯ КОЛЛЕКЦИЯ</value>
+    </data>
+    <data name="ActionPlayAllText" xml:space="preserve">
+        <value>ВОСПР.</value>
+    </data>
+    <data name="ActionShuffleText" xml:space="preserve">
+        <value>ПЕРЕМЕШАТЬ</value>
+    </data>
+    <data name="NowPlayingPageCurrentTabText" xml:space="preserve">
+        <value>СЕЙЧАС ИГРАЕТ</value>
+    </data>
+    <data name="NowPlayingPageQueueTabText" xml:space="preserve">
+        <value>ОЧЕРЕДЬ</value>
+    </data>
+</root>

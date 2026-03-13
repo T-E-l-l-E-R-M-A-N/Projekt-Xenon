@@ -155,7 +155,7 @@
                     <avalonia:Icon Value="mdi chevron-right"/>
                 </Button>
             </StackPanel>
-            <Button Command="{Binding ToggleNowPlayingViewCommand}"
+            <Button Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).OpenFullScreenViewCommand}"
                     Margin="100,0"
                     HorizontalAlignment="Right">
                 <Button.Template>

@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 using ProjektXenon.Shared.ViewModels;
 using IValueConverter = Avalonia.Data.Converters.IValueConverter;
 
-namespace ProjektXenon.Desktop.UI.ValueConverters;
+namespace ProjektXenon.Mobile.UI.ValueConverters;
 
-public class NavMenuIconConverter : MarkupExtension, IValueConverter
+public class PageNameLocalizeConverter : MarkupExtension, IValueConverter
 {
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
@@ -19,11 +19,11 @@ public class NavMenuIconConverter : MarkupExtension, IValueConverter
         
         return (value as IPage).Type switch
         {
-            PageType.Explore => "mdi home",
-            PageType.Favorites => "mdi heart",
-            PageType.NowPlaying => "mdi play",
-            PageType.Search => "mdi magnify",
-            PageType.Settings => "mdi cog"
+            PageType.Explore => Application.Current?.Resources["ExplorePageTitle"].ToString(),
+            PageType.Favorites => Application.Current?.Resources["FavoritesPageTitle"].ToString(),
+            PageType.NowPlaying => Application.Current?.Resources["NowPlayingPageTitle"].ToString(),
+            PageType.Search => Application.Current?.Resources["SearchPageTitle"].ToString(),
+            PageType.Settings => Application.Current?.Resources["SettingsPageTitle"].ToString(),
         };
     }
 

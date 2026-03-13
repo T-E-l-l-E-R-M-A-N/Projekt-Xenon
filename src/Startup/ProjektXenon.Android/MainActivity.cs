@@ -8,12 +8,12 @@ using Avalonia;
 using Avalonia.Android;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
-using ProjektXenon.ViewModels;
+using ProjektXenon.Mobile.UI;
 
 namespace ProjektXenon.Android.Startup;
 
 [Activity(
-    Label = "ProjektXenon.Android.Startup",
+    Label = "ProjektXenon.Android",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,

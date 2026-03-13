@@ -3,7 +3,7 @@ using Avalonia.Markup.Xaml;
 using ProjektXenon.Shared.ViewModels;
 using IValueConverter = Avalonia.Data.Converters.IValueConverter;
 
-namespace ProjektXenon.Desktop.UI.ValueConverters;
+namespace ProjektXenon.Mobile.UI.ValueConverters;
 
 public class NavMenuIconConverter : MarkupExtension, IValueConverter
 {
@@ -22,8 +22,7 @@ public class NavMenuIconConverter : MarkupExtension, IValueConverter
             PageType.Explore => "mdi home",
             PageType.Favorites => "mdi heart",
             PageType.NowPlaying => "mdi play",
-            PageType.Search => "mdi magnify",
-            PageType.Settings => "mdi cog"
+            PageType.Search => "mdi magnify"
         };
     }
 

@@ -4,7 +4,7 @@ public partial class NowPlayingPageViewModel : ViewModelBase, IPage
 {
     #region Page Base
 
-    public string Name => "Сейчас играет";
+    public string Name => Strings.NowPlayingPageTitle;
     public PageType Type => PageType.NowPlaying;
 
     #endregion
@@ -26,7 +26,11 @@ public partial class NowPlayingPageViewModel : ViewModelBase, IPage
     [ObservableProperty] private double _position;
     [ObservableProperty] private string? _totalTimeString;
     [ObservableProperty] private bool _playlistIsOpen;
-    [ObservableProperty] private bool _isAvailable;
+    public bool IsAvailable
+    {
+        get => CurrentMedia != null;
+        set => OnPropertyChanged();
+    }
 
     #endregion
 

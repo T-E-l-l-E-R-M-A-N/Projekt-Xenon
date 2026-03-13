@@ -7,7 +7,7 @@ public partial class SearchPageViewModel : ViewModelBase, IPage
 {
     #region Page Base
 
-    public string Name => "Поиск";
+    public string Name => Strings.SearchPageTitle;
     public PageType Type => PageType.Search;
 
     #endregion

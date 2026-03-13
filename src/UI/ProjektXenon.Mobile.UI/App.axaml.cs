@@ -3,21 +3,21 @@ using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
-using Microsoft.Maui.Controls.Internals;
-using ProjektXenon.Desktop.UI.Views;
+using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Styling;
+using ProjektXenon.Mobile.UI.Views;
+using ProjektXenon.Services;
 using ProjektXenon.Shared;
+using ProjektXenon.Shared.Models;
 using ProjektXenon.Shared.ViewModels;
 using Application = Avalonia.Application;
-using FlowDirection = Avalonia.Media.FlowDirection;
 using Rect = Avalonia.Rect;
-using SolidColorBrush = Avalonia.Media.SolidColorBrush;
-using TextAlignment = Microsoft.Maui.TextAlignment;
+using Window = Avalonia.Controls.Window;
 
-namespace ProjektXenon.Desktop.UI;
+namespace ProjektXenon.Mobile.UI;
 
 public partial class App : Application
 {
@@ -26,53 +26,105 @@ public partial class App : Application
         RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
             ? Environment.CurrentDirectory + "/media"
             : FileSystem.AppDataDirectory + "/media";
+    
+    public MainViewModel ApplicationViewModel { get; set; }
 
     public override void Initialize()
     {
         IoC.Build();
+
         AvaloniaXamlLoader.Load(this);
 
+        var settings = IoC.Resolve<SettingsManagerService>();
+        settings.SettingsChanged += SettingsOnSettingsChanged;
+        settings.Load();
+        settings.SetTheme(settings.Settings.Theme);
+        settings.SetLanguage(settings.Settings.Language);
         if (!Directory.Exists(AppDataPath))
             Directory.CreateDirectory(AppDataPath);
     }
 
+    private void SettingsOnSettingsChanged(object? sender, SettingsModel e)
+    {
+        switch (e.Name)
+        {
+            case "Theme":
+                switch (e.Value)
+                {
+                    case "Default":
+                        ActualThemeVariantChanged += OnActualThemeVariantChanged;
+                        SwitchTheme();
+                        break;
+                    case "Light":
+                        ActualThemeVariantChanged -= OnActualThemeVariantChanged;
+                        Application.Current?.Resources.MergedDictionaries.Clear();
+                        Application.Current?.Resources.MergedDictionaries.Add(
+                            new ResourceInclude(new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Light.axaml"))
+                            {
+                                Source = new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Light.axaml")
+                            });
+                        break;
+                    case "Dark":
+                        ActualThemeVariantChanged -= OnActualThemeVariantChanged;
+                        Application.Current?.Resources.MergedDictionaries.Clear();
+                        Application.Current?.Resources.MergedDictionaries.Add(
+                            new ResourceInclude(new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Dark.axaml"))
+                            {
+                                Source = new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Dark.axaml")
+                            });
+                        break;
+                }
+
+                break;
+            case "Language":
+                switch (e.Value)
+                {
+                    case "English":
+                        ProjektXenon.Shared.Strings.Culture = new CultureInfo("en_US");
+                        break;
+                    case "Russian":
+                        ProjektXenon.Shared.Strings.Culture = new CultureInfo("ru_RU");
+                        break;
+                }
+                
+                break;
+        }
+    }
+
     public override void OnFrameworkInitializationCompleted()
     {
-        var viewmodel = IoC.Resolve<MainViewModel>();
-        viewmodel.RequestFullScreen += ViewmodelOnRequestFullScreen;
-        viewmodel.Init();
+        ApplicationViewModel = IoC.Resolve<MainViewModel>();
+        ApplicationViewModel.Init();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
+            var window = new Window()
             {
-                DataContext = viewmodel
+                DataContext = ApplicationViewModel,
+                Content = new MainView(),
+                Width = 300,
+                Height = 600,
+                CanResize = false
+            };
+
+            desktop.MainWindow = window;
+            
+        }
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
+        {
+            singleView.MainView = new MainView()
+            {
+                DataContext = ApplicationViewModel
             };
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void ViewmodelOnRequestFullScreen(object? sender, EventArgs e)
-    {
-        var lifeTime = (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
-        lifeTime.MainWindow.Hide();
-        var fullScreen = new FullScreenWindow()
-        {
-            DataContext = lifeTime.MainWindow.DataContext
-        };
-        fullScreen.Closing += FullScreenOnClosing;
-        fullScreen.Show();
-    }
+    
 
-    private void FullScreenOnClosing(object? sender, WindowClosingEventArgs e)
-    {
-        var lifeTime = (ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
-        lifeTime.MainWindow.IsEnabled = true;
-        lifeTime.MainWindow.Show();
-    }
 
     private void DisableAvaloniaDataAnnotationValidation()
     {
@@ -86,8 +138,34 @@ public partial class App : Application
             BindingPlugins.DataValidators.Remove(plugin);
         }
     }
-}
 
+    private void SwitchTheme()
+    {
+        if (ActualThemeVariant == ThemeVariant.Default || ActualThemeVariant == ThemeVariant.Light)
+        {
+            Application.Current?.Resources.MergedDictionaries.Clear();
+            Application.Current?.Resources.MergedDictionaries.Add(
+                new ResourceInclude(new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Light.axaml"))
+                {
+                    Source = new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Light.axaml")
+                });
+        }
+        else if (ActualThemeVariant == ThemeVariant.Dark)
+        {
+            Application.Current?.Resources.MergedDictionaries.Clear();
+            Application.Current?.Resources.MergedDictionaries.Add(
+                new ResourceInclude(new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Dark.axaml"))
+                {
+                    Source = new Uri("avares://ProjektXenon.Mobile.UI/Resources/Themes/Dark.axaml")
+                });
+        }
+    }
+
+    private void OnActualThemeVariantChanged(object? sender, EventArgs e)
+    {
+        SwitchTheme();
+    }
+}
 
 public class TilePanel : Panel
 {

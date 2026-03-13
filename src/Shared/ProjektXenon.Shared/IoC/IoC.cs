@@ -11,6 +11,7 @@ public static class IoC
         services.AddScoped<UniversalAudioEngine>();
         services.AddScoped<MediaPlaybackService>();
         services.AddScoped<NavigationService>();
+        services.AddScoped<SettingsManagerService>();
 
         services.AddScoped<TrackRepositoryService>();
 
@@ -23,9 +24,10 @@ public static class IoC
         services.AddScoped<MediaContextMenuFlyoutViewModel>();
 
         services.AddScoped<IPage, ExplorePageViewModel>();
-        services.AddScoped<IPage, SearchPageViewModel>();
         services.AddScoped<IPage, FavoritesPageViewModel>();
         services.AddScoped<IPage, NowPlayingPageViewModel>();
+        services.AddScoped<IPage, SearchPageViewModel>();
+        services.AddScoped<IPage, SettingsPageViewModel>();
 
         services.AddScoped<MainViewModel>();
 

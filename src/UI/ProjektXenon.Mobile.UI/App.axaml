@@ -5,8 +5,8 @@
              xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
              xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
-             xmlns:ui="clr-namespace:ProjektXenon.Desktop.UI"
-             x:Class="ProjektXenon.Desktop.UI.App"
+             xmlns:ui="clr-namespace:ProjektXenon.Mobile.UI"
+             x:Class="ProjektXenon.Mobile.UI.App"
              RequestedThemeVariant="Default">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -19,16 +19,39 @@
 
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
+        <Style Selector="Button.TextButton">
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <TextBlock
+                        Text="{TemplateBinding Content, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
+                        FontWeight="SemiBold"
+                        Foreground="{TemplateBinding Foreground}" />
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="{DynamicResource SecondaryForegroundBrush}" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Foreground" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Opacity" Value="0.5" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Foreground" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Opacity" Value="0.5" />
+            </Style>
+        </Style>
+        
         <Style Selector="TextBox.AppBarSearchBox">
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Border Width="320"
+                    <Border Width="{TemplateBinding Width}"
                             DockPanel.Dock="Right"
                             BorderBrush="DimGray"
-                            Background="LightGray"
+                            Background="{DynamicResource PrimaryBackgroundBrush}"
                             Cursor="IBeam"
-                            BorderThickness="0"
-                            Height="28"
+                            BorderThickness="1"
+                            Height="48"
                             Padding="12,0">
                         <Grid ColumnDefinitions="Auto,*,Auto">
                             <ContentPresenter Grid.Column="0" Grid.ColumnSpan="1"
@@ -261,6 +284,51 @@
                     </DockPanel>
                 </ControlTemplate>
             </Setter>
+        </Style>
+        
+        <Style Selector="Button:pressed">
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        
+        <Style Selector="ToggleButton:pressed">
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton">
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="Gray" />
+            </Style>
+
+            <Style Selector="^:pressed">
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="DimGray" />
+            </Style>
+
+            <Style Selector="^:disabled">
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="Gray" />
+            </Style>
+        </Style>
+
+        <Style Selector="Button.TransportControlsButton avalonia|Icon">
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+
+        <Style Selector="Button.TransportControlsButton:disabled avalonia|Icon">
+            <Setter Property="Foreground" Value="Gray" />
         </Style>
     </Application.Styles>
 

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0-android</TargetFramework>
+    <TargetFramework>net10.0-android</TargetFramework>
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ApplicationId>com.CompanyName.ProjektXenon</ApplicationId>
@@ -10,6 +10,7 @@
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <RootNamespace>ProjektXenon.Android</RootNamespace>
+    <AndroidSdkDirectory>D:\Android</AndroidSdkDirectory>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjektXenon\ProjektXenon.csproj" />
+    <ProjectReference Include="..\..\UI\ProjektXenon.Mobile.UI\ProjektXenon.Mobile.UI.csproj" />
   </ItemGroup>
 </Project>

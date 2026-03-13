@@ -1,0 +1,288 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:loc="clr-namespace:ProjektXenon.Shared;assembly=ProjektXenon.Shared"
+             xmlns:views="clr-namespace:ProjektXenon.Mobile.UI.Views"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             Background="{DynamicResource PrimaryBackgroundBrush}"
+             Foreground="{DynamicResource ForegroundBrush}"
+             x:Class="ProjektXenon.Mobile.UI.Views.SettingsPage"
+             x:DataType="viewModels:SettingsPageViewModel">
+    <UserControl.Styles>
+        <Style Selector="ToggleButton:pressed">
+            <Setter Property="RenderTransform" Value="{x:Null}" />
+        </Style>
+        <Style Selector="StackPanel.PageSection">
+            <Setter Property="Spacing" Value="8" />
+        </Style>
+        <Style Selector="TextBlock.PageSectionText">
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="Width" Value="270" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="border"
+                            Width="270"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid ColumnDefinitions="*">
+                                <TextBlock Name="PlaceholderTextBlock"
+                                           Grid.Column="0"
+                                           Margin="{TemplateBinding Padding}"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                           Foreground="{TemplateBinding PlaceholderForeground}"
+                                           Text="{TemplateBinding PlaceholderText}">
+                                    <TextBlock.IsVisible>
+                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                            <Binding Path="SelectionBoxItem"
+                                                     RelativeSource="{RelativeSource TemplatedParent}"
+                                                     Converter="{x:Static ObjectConverters.IsNull}" />
+                                            <Binding Path="!IsEditable"
+                                                     RelativeSource="{RelativeSource TemplatedParent}" />
+                                        </MultiBinding>
+                                    </TextBlock.IsVisible>
+                                </TextBlock>
+                                <ContentControl Margin="{TemplateBinding Padding}"
+                                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                Content="{TemplateBinding Text, Converter={StaticResource StringCaseConverter}, ConverterParameter=l}"
+                                                FontSize="38"
+                                                FontWeight="Thin"
+                                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                IsVisible="{TemplateBinding IsEditable, Converter={x:Static BoolConverters.Not}}">
+                                </ContentControl>
+
+                                <Popup Name="PART_Popup"
+                                       MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                                       MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                       IsLightDismissEnabled="True"
+                                       IsOpen="{TemplateBinding IsDropDownOpen,
+                                            Mode=TwoWay}"
+                                       PlacementTarget="{TemplateBinding}"
+                                       InheritsTransform="True">
+                                    <Border Background="{DynamicResource PrimaryBackgroundBrush}"
+                                            BorderBrush="{DynamicResource SecondaryForegroundBrush}"
+                                            BorderThickness="1">
+                                        <ScrollViewer
+                                            HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                            VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                            IsDeferredScrollingEnabled="{TemplateBinding (ScrollViewer.IsDeferredScrollingEnabled)}"
+                                            ScrollViewer.IsScrollChainingEnabled="False">
+                                            <ItemsPresenter Name="PART_ItemsPresenter"
+                                                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                            <ToggleButton Name="toggle"
+                                          Grid.Column="1"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          CornerRadius="0"
+                                          ClickMode="Press"
+                                          Focusable="False"
+                                          IsChecked="{TemplateBinding IsDropDownOpen,
+                                                      Mode=TwoWay}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate>
+                                        <avalonia:Icon Foreground="{DynamicResource ForegroundBrush}"
+                                                       FontSize="18"
+                                                       Value="mdi chevron-down" />
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                        </StackPanel>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Height="38"
+                                      FontSize="18"
+                                      FontWeight="SemiBold"
+                                      Padding="0,10"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="Center"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="Transparent"
+                                      BorderThickness="0"
+                                      Content="{TemplateBinding Content, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      CornerRadius="0" />
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Style>
+            <Style Selector="^:selected /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Style>
+            <Style Selector="^:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Style>
+            <Style Selector="^:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Style>
+            <Style Selector="^:selected:focus:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource SecondaryForegroundBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Style>
+        </Style>
+
+        
+    </UserControl.Styles>
+    <Grid>
+        <Button VerticalAlignment="Top"
+                Classes="PageTitleLabel"
+                ClipToBounds="False"
+                Command="{Binding $parent[views:MainView].BackButtonCommand}"
+                x:Name="BackButton"
+                Height="140"
+                Content="{Binding Name}">
+            <Button.Template>
+                <ControlTemplate>
+                    <Border Background="Transparent"
+                            Width="400"
+                            ClipToBounds="False"
+                            Height="140">
+                        <TextBlock
+                            Text="{TemplateBinding Content, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}">
+                            <TextBlock.OpacityMask>
+                                <LinearGradientBrush StartPoint="0% 0%"
+                                                     EndPoint="0% 100%">
+                                    <GradientStop Offset="0.6" Color="Transparent" />
+                                    <GradientStop Offset="0.68" Color="Black" />
+                                </LinearGradientBrush>
+                            </TextBlock.OpacityMask>
+                            <TextBlock.Transitions>
+                                <Transitions>
+                                    <BrushTransition Property="Foreground" Easing="CubicEaseOut"
+                                                     Duration="0:0:0.8" />
+                                    <DoubleTransition Property="FontSize" Easing="CubicEaseOut"
+                                                      Duration="0:0:0.10" />
+                                </Transitions>
+                            </TextBlock.Transitions>
+                        </TextBlock>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <StackPanel Spacing="20"
+                    Margin="0,90,0,0">
+            <StackPanel Classes="PageSection">
+                <TextBlock Classes="PageSectionText"
+                           Text="{x:Static loc:Strings.SettingsPagePageSectionThemeTitle}" />
+                <ComboBox SelectedItem="{Binding Theme}"
+                          IsVisible="False"
+                          ItemsSource="{Binding Themes}"
+                          PlaceholderText="{Binding Theme}"
+                          Text="{Binding Theme}">
+                </ComboBox>
+                <StackPanel Orientation="Horizontal"
+                            Spacing="5">
+                    <Button Command="{Binding SetDefaultThemeCommand}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="90"
+                                        BorderThickness="1"
+                                        BorderBrush="Gray"
+                                        Height="90">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0% 100%"
+                                                             EndPoint="100% 0%">
+                                            <GradientStop Offset="0.49" Color="White" />
+                                            <GradientStop Offset="0.5" Color="Black" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Command="{Binding SetLightThemeCommand}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="90"
+                                        BorderThickness="1"
+                                        BorderBrush="Gray"
+                                        Height="90">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0% 100%"
+                                                             EndPoint="100% 0%">
+                                            <GradientStop Offset="0.0" Color="White" />
+                                            <GradientStop Offset="0.5" Color="LightGray" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Command="{Binding SetDarkThemeCommand}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="90"
+                                        BorderThickness="1"
+                                        BorderBrush="Gray"
+                                        Height="90">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0% 100%"
+                                                             EndPoint="100% 0%">
+                                            <GradientStop Offset="0.0" Color="Black" />
+                                            <GradientStop Offset="0.5" Color="Gray" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Classes="PageSection">
+                <TextBlock Classes="PageSectionText"
+                           Text="{x:Static loc:Strings.SettingsPagePageSectionLanguageTitle}" />
+                <ComboBox SelectedItem="{Binding Language}"
+                          ItemsSource="{Binding Languages}"
+                          PlaceholderText="{Binding Language}"
+                          Text="{Binding Language}">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Classes="PageSection"
+                        Orientation="Horizontal">
+                <TextBlock Classes="PageSectionText"
+                           Text="{x:Static loc:Strings.SettingsPagePageSectionFeaturedTitle}" />
+                <Button Classes="TextButton"
+                        Command="{Binding ClearAllFavoritesCommand}"
+                        Content="{x:Static loc:Strings.ActionClearAllText}">
+
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+
+</UserControl>

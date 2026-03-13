@@ -1,0 +1,63 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:views="clr-namespace:ProjektXenon.Desktop.UI.Views"
+             xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+             mc:Ignorable="d" d:DesignWidth="1020" d:DesignHeight="640"
+             Background="Black"
+             x:DataType="viewModels:MainViewModel"
+             x:Class="ProjektXenon.Desktop.UI.Views.MainView">
+    <UserControl.Styles>
+        
+    </UserControl.Styles>
+    <Grid>
+        <Image
+            asyncImageLoader:ImageLoader.Source="https://img.freepik.com/free-vector/geometric-grey-background_1055-3147.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
+            Opacity="0.2"
+            Stretch="UniformToFill">
+        </Image>
+        <DockPanel LastChildFill="True">
+            <ContentControl DockPanel.Dock="Bottom"
+                            Content="{Binding NowPlaying}"/>
+            <SplitView DisplayMode="CompactInline"
+                       x:Name="SplitView"
+                       CompactPaneLength="80"
+                       OpenPaneLength="300"
+                       IsPaneOpen="{Binding NavMenu.IsOpen, Mode=TwoWay}"
+                       Pane="{Binding NavMenu}">
+                <Grid>
+                    <TransitioningContentControl Content="{Binding CurrentPage}" />
+                    <Border DockPanel.Dock="Top"
+                            Height="30"
+                            VerticalAlignment="Top"
+                            Margin="0,30"
+                            Padding="30,0"
+                            Classes="PageTabsBorder">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="12"
+                                    VerticalAlignment="Center">
+                            <Button x:Name="ToggleNavMenuButton"
+                                    IsVisible="False"
+                                Command="{Binding $parent[views:MainView].((viewModels:MainViewModel)DataContext).AppBar.ToggleNavMenuCommand}">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <avalonia:Icon FontSize="24"
+                                                       Margin="0,0,10,0"
+                                                       Foreground="White"
+                                                       Value="mdi menu" />
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                        </StackPanel>
+                    </Border>
+                    <ContentControl Content="{Binding MediaContextMenuFlyout}"/>
+                </Grid>
+            </SplitView>
+        </DockPanel>
+        
+    </Grid>
+</UserControl>

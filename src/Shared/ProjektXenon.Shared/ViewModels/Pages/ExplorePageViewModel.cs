@@ -7,7 +7,7 @@ public partial class ExplorePageViewModel : ViewModelBase, IPage
 {
     #region Page Base
 
-    public string Name => "Для вас";
+    public string Name => Strings.ExplorePageTitle;
     public PageType Type => PageType.Explore;
 
     #endregion

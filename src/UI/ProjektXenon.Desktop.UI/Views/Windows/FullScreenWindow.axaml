@@ -1,0 +1,281 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+        xmlns:viewModels="clr-namespace:ProjektXenon.Shared.ViewModels;assembly=ProjektXenon.Shared"
+        xmlns:models="clr-namespace:ProjektXenon.Shared.Models;assembly=ProjektXenon.Shared"
+        xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+        xmlns:ui="clr-namespace:ProjektXenon.Desktop.UI"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ProjektXenon.Desktop.UI.Views.FullScreenWindow"
+        WindowState="FullScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        x:DataType="viewModels:MainViewModel"
+        Title="FullScreenWindow">
+    <Window.Styles>
+        <Style Selector="TextBlock.TitleTextView">
+            <Style.Animations>
+                <Animation Duration="0:3:05"
+                           Easing="CubicEaseOut"
+                           PlaybackDirection="Alternate"
+                           IterationCount="INFINITE"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="TranslateTransform.X" Value="200" />
+                        <Setter Property="TranslateTransform.Y" Value="110" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                    </KeyFrame>
+                    <KeyFrame Cue="30%">
+                        <Setter Property="TranslateTransform.X" Value="-100" />
+                        <Setter Property="TranslateTransform.Y" Value="290" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                    </KeyFrame>
+                    <KeyFrame Cue="60%">
+                        <Setter Property="TranslateTransform.X" Value="200" />
+                        <Setter Property="TranslateTransform.Y" Value="110" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="TranslateTransform.X" Value="1200" />
+                        <Setter Property="TranslateTransform.Y" Value="-440" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="TextBlock.Title2TextView">
+            <Style.Animations>
+                <Animation Duration="0:0:59"
+                           Easing="CubicEaseOut"
+                           PlaybackDirection="Alternate"
+                           IterationCount="INFINITE"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="TranslateTransform.X" Value="0" />
+                        <Setter Property="TranslateTransform.Y" Value="200" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.8" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.99" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="TranslateTransform.X" Value="900" />
+                        <Setter Property="TranslateTransform.Y" Value="-340" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.8" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.99" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="TextBlock.ArtistTextView">
+            <Style.Animations>
+                <Animation Duration="0:1:30"
+                           Easing="CubicEaseOut"
+                           PlaybackDirection="Alternate"
+                           IterationCount="INFINITE"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="TranslateTransform.X" Value="300" />
+                        <Setter Property="TranslateTransform.Y" Value="0" />
+                        <Setter Property="RotateTransform.Angle" Value="60" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="2.8" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="3.59" />
+                    </KeyFrame>
+                    <KeyFrame Cue="60%">
+                        <Setter Property="TranslateTransform.X" Value="0" />
+                        <Setter Property="TranslateTransform.Y" Value="-380" />
+                        <Setter Property="RotateTransform.Angle" Value="60" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="2.8" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="3.59" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="TextBlock.TimeTextView">
+            <Style.Animations>
+                <Animation Duration="0:2:59"
+                           Easing="CubicEaseOut"
+                           PlaybackDirection="AlternateReverse"
+                           IterationCount="INFINITE"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="TranslateTransform.X" Value="200" />
+                        <Setter Property="TranslateTransform.Y" Value="560" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="TranslateTransform.X" Value="600" />
+                        <Setter Property="TranslateTransform.Y" Value="300" />
+                        <Setter Property="RotateTransform.Angle" Value="-30" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton">
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            
+            <Style Selector="^:pointerover" >
+                <Setter Property="Background" Value="Gray"/>
+            </Style>
+            
+            <Style Selector="^:pressed" >
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="DimGray"/>
+            </Style>
+            
+            <Style Selector="^:disabled" >
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton">
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            
+            <Style Selector="^:pointerover" >
+                <Setter Property="Background" Value="Gray"/>
+            </Style>
+            
+            <Style Selector="^:pressed" >
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="DimGray"/>
+            </Style>
+            
+            <Style Selector="^:disabled" >
+                <Setter Property="RenderTransform" Value="{x:Null}" />
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton avalonia|Icon">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+        
+        <Style Selector="Button.TransportControlsButton:disabled avalonia|Icon">
+            <Setter Property="Foreground" Value="Gray"/>
+        </Style>
+    </Window.Styles>
+    <Grid Background="Black">
+        <Image
+            asyncImageLoader:ImageLoader.Source="https://img.freepik.com/free-vector/geometric-grey-background_1055-3147.jpg?semt=ais_hybrid&amp;w=740&amp;q=80"
+            Opacity="0.2"
+            Stretch="UniformToFill">
+        </Image>
+        <Image Stretch="UniformToFill"
+               Opacity="0.8"
+               Effect="blur(80)"
+               asyncImageLoader:ImageLoader.Source="{Binding NowPlaying.((models:MediaItem)CurrentMedia).Image}"
+        >
+        </Image>
+        <Viewbox Stretch="Fill" StretchDirection="Both">
+            <Canvas Width="1020" Height="640">
+                
+                <TextBlock Text="{Binding NowPlaying.CurrentTime, FallbackValue=3:44, StringFormat=m\\:ss}"
+                           FontSize="90"
+                           FontWeight="SemiBold"
+                           Foreground="#30FFFFFF"
+                           Classes="TimeTextView" />
+            </Canvas>
+        </Viewbox>
+        <DockPanel LastChildFill="True"
+                           VerticalAlignment="Bottom"
+                           Margin="30">
+                    <Border Width="300"
+                            Height="300"
+                            BorderThickness="1"
+                            BorderBrush="Gray"
+                            Background="Transparent">
+                        <Grid>
+                            <avalonia:Icon FontSize="100"
+                                           Foreground="Gray"
+                                           Value="mdi headphones"/>
+                            <Image Stretch="Uniform"
+                                   asyncImageLoader:ImageLoader.Source="{Binding CurrentMedia.Image}"/>
+                        </Grid>
+                    </Border>
+                    <StackPanel Margin="20,0"
+                                Spacing="10"
+                                VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0">
+                            <Button Classes="TransportControlsButton"
+                                    Command="{Binding NowPlaying.SkipPreviousCommand}">
+                                <avalonia:Icon Value="mdi chevron-left"/>
+                            </Button>
+                            <Button Classes="TransportControlsButton"
+                                    Command="{Binding NowPlaying.TogglePauseCommand}"
+                                    Classes.IsPlaying="{Binding NowPlaying.IsPlaying}">
+                                <Button.Styles>
+                                    <Style Selector="Button:not(.IsPlaying)">
+                                        <Setter Property="Content">
+                                            <Template>
+                                                <avalonia:Icon Value="mdi play" />
+                                            </Template>
+                                        </Setter>
+                                    </Style>
+                                    <Style Selector="Button.IsPlaying">
+                                        <Setter Property="Content">
+                                            <Template>
+                                                <avalonia:Icon Value="mdi pause" />
+                                            </Template>
+                                        </Setter>
+                                    </Style>
+                                </Button.Styles>
+                            </Button>
+                            <Button Classes="TransportControlsButton"
+                                    Command="{Binding NowPlaying.SkipNextCommand}">
+                                <avalonia:Icon Value="mdi chevron-right"/>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="10">
+                            <TextBlock FontSize="24"
+                                       Foreground="White"
+                                       Text="{Binding NowPlaying.CurrentMedia.Time, StringFormat=m\\:ss}" />
+                        </StackPanel>
+                        <TextBlock FontSize="48"
+                                   FontWeight="Light"
+                                   Foreground="White"
+                                   TextTrimming="CharacterEllipsis"
+                                   Text="{Binding NowPlaying.CurrentMedia.Name, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                        <TextBlock FontSize="30"
+                                   FontWeight="Light"
+                                   Foreground="Gray"
+                                   TextTrimming="CharacterEllipsis"
+                                   Text="{Binding NowPlaying.CurrentMedia.Artist, Converter={StaticResource StringCaseConverter}, ConverterParameter=u}" />
+                    </StackPanel>
+                </DockPanel>
+        <Button Classes="TransportControlsButton"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="20"
+                Click="Button_OnClick">
+            <avalonia:Icon Value="mdi arrow-left"/>
+        </Button>
+    </Grid>
+</Window>
